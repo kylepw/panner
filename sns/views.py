@@ -13,3 +13,19 @@ class PersonList(ListView):
 class PersonDetail(DetailView):
     model = Person
     context_object_name = 'person'
+
+
+def facebook_view(request, pk):
+    return HttpResponse('Facebook feed for user %s' % str(pk))
+
+def instagram_view(request, pk):
+    return HttpResponse('Instagram feed for user %s' % str(pk))
+
+def reddit_view(request, pk):
+    return HttpResponse('Reddit feed for user %s' % str(pk))
+
+def spotify_view(request, pk):
+    return HttpResponse('Spotify feed for user %s' % str(pk))
+
+def twitter_view(request, pk):
+    return HttpResponse('Twitter feed for user %s' % str(pk))
