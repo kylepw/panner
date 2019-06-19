@@ -10,3 +10,6 @@ class Person(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_fields(self):
+        return [(f.name, getattr(self, f.name)) for f in Person._meta.get_fields() if f.name not in ('id', 'name')]
