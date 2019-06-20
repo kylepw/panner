@@ -1,0 +1,12 @@
+{% extends "sns/base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+  <h2>New Profile</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create</button>
+  </form>
+{% endblock %}

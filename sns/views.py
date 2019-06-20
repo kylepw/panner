@@ -1,7 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.generic import DetailView, ListView
 
+from .forms import ProfileForm
 from .models import Profile
 
 
@@ -16,7 +17,14 @@ class ProfileDetail(DetailView):
 
 
 def profile_new(request):
-    return HttpResponse('Create new profile.')
+    if request.method == 'POST':
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            post = form.save()
+            return redirect('profile-detail', pk=post.pk)
+    else:
+        form = ProfileForm()
+    return render(request, 'sns/profile_edit.html', {'form': form})
 
 def profile_edit(request, pk):
     return HttpResponse('Edit profile %s' % str(pk))
