@@ -2,18 +2,24 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
-from .models import Person
+from .models import Profile
 
 
-class PersonList(ListView):
-    model = Person
-    context_object_name = 'people'
+class ProfileList(ListView):
+    model = Profile
+    context_object_name = 'profiles'
 
 
-class PersonDetail(DetailView):
-    model = Person
-    context_object_name = 'person'
+class ProfileDetail(DetailView):
+    model = Profile
+    context_object_name = 'profile'
 
+
+def profile_new(request):
+    return HttpResponse('Create new profile.')
+
+def profile_edit(request, pk):
+    return HttpResponse('Edit profile %s' % str(pk))
 
 def facebook_view(request, pk):
     return HttpResponse('Facebook feed for user %s' % str(pk))

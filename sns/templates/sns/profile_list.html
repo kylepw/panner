@@ -1,0 +1,12 @@
+{% extends "sns/base.html" %}
+
+{% block title %}Profiles{% endblock %}
+
+{% block content %}
+  <h2>Profiles</h2>
+  <ul>
+    {% for p in profiles %}
+    <li><a href="{% url 'profile-detail' pk=p.pk %}">{{ p.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
