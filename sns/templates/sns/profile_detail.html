@@ -3,10 +3,11 @@
 {% block title %}{{ profile.name }}'s SNS Profile{% endblock %}
 
 {% block content %}
-  <h2>{{ profile.name }}'s SNS Profile</h2>
-  <ul>
-    {% for sns, value in profile.get_fields %}
-    <li>{{ sns }}: {{ value }} <a href="{% url sns pk=profile.pk %}">View</a></li>
-    {% endfor %}
-  </ul>
+<h2>{{ profile.name }}'s SNS Profile</h2>
+<a href="{% url 'profile_edit' pk=profile.pk %}">Edit</a>
+<ul>
+  {% for sns, value in profile.get_fields %}
+  <li>{{ sns }}: {{ value }} <a href="{% url sns pk=profile.pk %}">View</a></li>
+  {% endfor %}
+</ul>
 {% endblock %}

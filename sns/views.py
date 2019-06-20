@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
 
 from .forms import ProfileForm
@@ -10,11 +10,9 @@ class ProfileList(ListView):
     model = Profile
     context_object_name = 'profiles'
 
-
 class ProfileDetail(DetailView):
     model = Profile
     context_object_name = 'profile'
-
 
 def profile_new(request):
     if request.method == 'POST':
@@ -27,7 +25,15 @@ def profile_new(request):
     return render(request, 'sns/profile_edit.html', {'form': form})
 
 def profile_edit(request, pk):
-    return HttpResponse('Edit profile %s' % str(pk))
+    profile = get_object_or_404(Profile, pk=pk)
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            post = form.save()
+            return redirect('profile-detail', pk=post.pk)
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'sns/profile_edit.html', {'form': form})
 
 def facebook_view(request, pk):
     return HttpResponse('Facebook feed for user %s' % str(pk))

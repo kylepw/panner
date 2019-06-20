@@ -1,7 +1,7 @@
 from django.db import models
 
 class Profile(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, unique=True)
     facebook = models.CharField(max_length=50, blank=True)
     instagram = models.CharField(max_length=30, blank=True)
     reddit = models.CharField(max_length=20, blank=True)
