@@ -1,6 +1,7 @@
-from django.db.utils import IntegrityError
+from django.db.utils import DataError, IntegrityError
 from django.test import TestCase
 
+from .forms import ProfileForm
 from .models import Profile
 
 
@@ -39,3 +40,38 @@ class ProfileModelTests(TestCase):
 
         self.assertNotIn('id', fields)
         self.assertNotIn('name', fields)
+
+    def test_name_set_to_None(self):
+        with self.assertRaises(IntegrityError):
+            Profile.objects.create(name=None)
+
+    def test_name_that_is_too_long(self):
+        with self.assertRaisesMessage(DataError, 'value too long'):
+            Profile.objects.create(name='Jjjjjjjjjjjjjjjjjjjjjerry')
+
+
+class ProfileFormTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        pass
+
+    def test_form_with_no_name(self):
+        form = ProfileForm(data={'name': ''})
+
+        self.assertFalse(form.is_valid())
+
+    def test_form_with_only_name(self):
+        form = ProfileForm(data={'name': 'Jerry'})
+
+        self.assertTrue(form.is_valid())
+
+    def test_form_with_name_and_sns_field(self):
+        data = {'name': 'Jerry', 'facebook': 'fb@fb.com'}
+        form = ProfileForm(data=data)
+
+        self.assertTrue(form.is_valid())
+
+    def test_name_that_is_too_long(self):
+        form = ProfileForm(data={'name': 'Jjjjjjjjjjjjjjjjjjjjjerry'})
+
+        self.assertFalse(form.is_valid())
