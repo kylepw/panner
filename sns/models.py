@@ -9,6 +9,9 @@ class Profile(models.Model):
     spotify = models.CharField(max_length=30, blank=True)
     twitter = models.CharField(max_length=20, blank=True)
 
+    class Meta:
+        ordering = ['pk']
+
     def __str__(self):
         return self.name
 
