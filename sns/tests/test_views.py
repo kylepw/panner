@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
+from ..forms import ProfileForm
 from ..models import Profile
 
 
@@ -149,3 +150,55 @@ class ProfileDetailView(TestCase):
     def test_does_not_render_page_without_pk_value_passed(self):
         with self.assertRaises(NoReverseMatch):
             self.client.get(reverse('profile-detail'))
+
+
+class ProfileNewTests(TestCase):
+
+    def post_profile(self, data=None):
+        if data is None:
+            return self.client.post(reverse('profile_new'))
+
+        return self.client.post(reverse('profile_new'), data)
+
+    def test_view_url_exists_at_desired_location(self):
+        self.assertEqual(reverse('profile_new'), '/profile/new/')
+
+    def test_uses_correct_template(self):
+        response = self.client.get(reverse('profile_new'))
+
+        self.assertTrue(response.status_code, 200)
+        self.assertTemplateUsed(response, 'sns/profile_edit.html')
+
+    def test_post_form_with_name_and_sns_handle(self):
+        data={'name': 'Harry', 'twitter': 'hry318'}
+        response = self.post_profile(data)
+
+        self.assertEqual(response.status_code, 302)
+        pk = Profile.objects.get(name=data['name']).pk
+        self.assertRedirects(response, reverse('profile-detail', kwargs={'pk': pk}))
+
+    def test_post_form_with_only_name(self):
+        name = 'Harry'
+        response = self.post_profile({'name': name})
+
+        self.assertEqual(response.status_code, 302)
+        pk = Profile.objects.get(name=name).pk
+        self.assertRedirects(response, reverse('profile-detail', kwargs={'pk': pk}))
+
+    def test_post_form_with_only_twitter_handle(self):
+        response = self.post_profile({'twitter': 'hry318'})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'sns/profile_edit.html')
+        self.assertContains(response, 'This field is required.')
+
+    def test_post_form_without_values(self):
+        response = self.post_profile()
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'sns/profile_edit.html')
+        self.assertContains(response, 'This field is required.')
+
+class ProfileEditTests(TestCase):
+
+    def test_something(self):
+        pass
+        # self.fail('add tests')
