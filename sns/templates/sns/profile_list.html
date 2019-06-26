@@ -4,9 +4,13 @@
 
 {% block content %}
   <h2>Profiles</h2>
+  {% if not profiles %}
+  No profiles to display.
+  {% else %}
   <ul>
     {% for p in profiles %}
     <li><a href="{% url 'profile-detail' pk=p.pk %}">{{ p.name }}</a></li>
     {% endfor %}
   </ul>
+  {% endif %}
 {% endblock %}
