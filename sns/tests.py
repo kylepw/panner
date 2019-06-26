@@ -7,6 +7,7 @@ from .models import Profile
 
 
 class ProfileListViewTests(TestCase):
+
     def setUp(self):
         self.a = Profile.objects.create(name='Jerry', twitter='jerryyy318')
         self.response = self.client.get(reverse('profile-list'))
@@ -46,6 +47,7 @@ class ProfileListViewTests(TestCase):
 
 
 class ProfileModelTests(TestCase):
+
     @classmethod
     def setUpTestData(cls):
         cls.FIELDS = {
@@ -64,6 +66,26 @@ class ProfileModelTests(TestCase):
     def test_name_label(self):
         name_label = self.a._meta.get_field('name').verbose_name
         self.assertEqual(name_label, 'name')
+
+    def test_facebook_label(self):
+        name_label = self.a._meta.get_field('facebook').verbose_name
+        self.assertEqual(name_label, 'facebook')
+
+    def test_instagram_label(self):
+        name_label = self.a._meta.get_field('instagram').verbose_name
+        self.assertEqual(name_label, 'instagram')
+
+    def test_reddit_label(self):
+        name_label = self.a._meta.get_field('reddit').verbose_name
+        self.assertEqual(name_label, 'reddit')
+
+    def test_spotify_label(self):
+        name_label = self.a._meta.get_field('spotify').verbose_name
+        self.assertEqual(name_label, 'spotify')
+
+    def test_name_twitter(self):
+        name_label = self.a._meta.get_field('twitter').verbose_name
+        self.assertEqual(name_label, 'twitter')
 
     def test_cannot_create_models_with_same_names(self):
         with self.assertRaisesMessage(
@@ -128,9 +150,21 @@ class ProfileModelTests(TestCase):
 
 
 class ProfileFormTests(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        pass
+
+    def test_form_labels(self):
+        form = ProfileForm()
+
+        self.assertEqual(form.fields['name'].label, 'Name')
+        self.assertEqual(form.fields['facebook'].label, 'Facebook')
+        self.assertEqual(form.fields['instagram'].label, 'Instagram')
+        self.assertEqual(form.fields['reddit'].label, 'Reddit')
+        self.assertEqual(form.fields['spotify'].label, 'Spotify')
+        self.assertEqual(form.fields['twitter'].label, 'Twitter')
+
+    def test_form_with_name_and_sns_field(self):
+        form = ProfileForm(data={'name': 'Jerry', 'facebook': 'fb@fb.com'})
+
+        self.assertTrue(form.is_valid())
 
     def test_form_with_no_name(self):
         form = ProfileForm(data={'name': ''})
@@ -139,12 +173,6 @@ class ProfileFormTests(TestCase):
 
     def test_form_with_only_name(self):
         form = ProfileForm(data={'name': 'Jerry'})
-
-        self.assertTrue(form.is_valid())
-
-    def test_form_with_name_and_sns_field(self):
-        data = {'name': 'Jerry', 'facebook': 'fb@fb.com'}
-        form = ProfileForm(data=data)
 
         self.assertTrue(form.is_valid())
 
