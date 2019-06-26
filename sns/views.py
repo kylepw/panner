@@ -9,6 +9,7 @@ from .models import Profile
 class ProfileList(ListView):
     model = Profile
     context_object_name = 'profiles'
+    paginate_by = 20
 
 class ProfileDetail(DetailView):
     model = Profile
