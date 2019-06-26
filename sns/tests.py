@@ -9,36 +9,40 @@ from .models import Profile
 class ProfileListViewTests(TestCase):
     def setUp(self):
         self.a = Profile.objects.create(name='Jerry', twitter='jerryyy318')
+        self.response = self.client.get(reverse('profile-list'))
 
-    def test_profile_multiple_profile_names_appear_on_page(self):
-        b = Profile.objects.create(name='Kylie', facebook='kylie@fb.com')
-        response = self.client.get(reverse('profile-list'))
+    def test_added_profile_name_appears_on_page(self):
+        b_name = 'Kylie'
 
-        self.assertContains(response, self.a.name)
-        self.assertContains(response, b.name)
+        self.assertContains(self.response, self.a.name)
+        self.assertNotContains(self.response, b_name)
+
+        Profile.objects.create(name=b_name)
+        self.response = self.client.get(reverse('profile-list'))
+
+        self.assertContains(self.response, self.a.name)
+        self.assertContains(self.response, b_name)
 
     def test_displays_new_profile_name_after_name_change(self):
         old_name = self.a.name
         new_name = 'Harry'
 
-        response = self.client.get(reverse('profile-list'))
-        self.assertContains(response, old_name)
+        self.assertContains(self.response, old_name)
 
         self.a.name = new_name
         self.a.save()
 
-        response = self.client.get(reverse('profile-list'))
-        self.assertContains(response, new_name)
-        self.assertNotContains(response, old_name)
+        self.response = self.client.get(reverse('profile-list'))
+        self.assertContains(self.response, new_name)
+        self.assertNotContains(self.response, old_name)
 
     def test_name_of_removed_profile_disappears_from_page(self):
         a_name = self.a.name
-        response = self.client.get(reverse('profile-list'))
 
-        self.assertContains(response, a_name)
+        self.assertContains(self.response, a_name)
         self.a.delete()
-        response = self.client.get(reverse('profile-list'))
-        self.assertNotContains(response, a_name)
+        self.response = self.client.get(reverse('profile-list'))
+        self.assertNotContains(self.response, a_name)
 
 
 class ProfileModelTests(TestCase):
