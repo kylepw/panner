@@ -97,6 +97,10 @@ class ProfileModelTests(TestCase):
         with self.assertRaisesMessage(DataError, 'value too long'):
             Profile.objects.create(name='Jjjjjjjjjjjjjjjjjjjjjerry')
 
+    def test_get_absolute_url(self):
+        pk = self.a.pk
+        self.assertEqual(self.a.get_absolute_url(), f'/profile/{pk}/')
+
 
 class ProfileFormTests(TestCase):
     @classmethod
