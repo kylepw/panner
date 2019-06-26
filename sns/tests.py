@@ -88,10 +88,35 @@ class ProfileModelTests(TestCase):
         with self.assertRaises(IntegrityError):
             Profile.objects.create(name=None)
 
+    def test_name_max_length(self):
+        max_length = self.a._meta.get_field('name').max_length
+
+        self.assertEqual(max_length, 20)
+
     def test_facebook_max_length(self):
         max_length = self.a._meta.get_field('facebook').max_length
 
         self.assertEqual(max_length, 50)
+
+    def test_instagram_max_length(self):
+        max_length = self.a._meta.get_field('instagram').max_length
+
+        self.assertEqual(max_length, 30)
+
+    def test_reddit_max_length(self):
+        max_length = self.a._meta.get_field('reddit').max_length
+
+        self.assertEqual(max_length, 20)
+
+    def test_spotify_max_length(self):
+        max_length = self.a._meta.get_field('spotify').max_length
+
+        self.assertEqual(max_length, 30)
+
+    def test_twitter_max_length(self):
+        max_length = self.a._meta.get_field('twitter').max_length
+
+        self.assertEqual(max_length, 20)
 
     def test_name_that_is_too_long(self):
         with self.assertRaisesMessage(DataError, 'value too long'):
