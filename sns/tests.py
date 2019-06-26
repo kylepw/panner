@@ -8,42 +8,91 @@ from .models import Profile
 
 class ProfileListViewTests(TestCase):
 
-    def setUp(self):
-        self.a = Profile.objects.create(name='Jerry', twitter='jerryyy318')
-        self.response = self.client.get(reverse('profile-list'))
+    @classmethod
+    def setUpTestData(cls):
+        # Create 25 profiles for pagination tests
+        number_of_profiles = 25
 
-    def test_added_profile_name_appears_on_page(self):
-        b_name = 'Kylie'
+        for profile_id in range(number_of_profiles):
+            Profile.objects.create(name=f'Profile {profile_id}')
 
-        self.assertContains(self.response, self.a.name)
-        self.assertNotContains(self.response, b_name)
+        cls.first_page = reverse('profile-list')
+        cls.second_page = reverse('profile-list') + '?page=2'
 
-        Profile.objects.create(name=b_name)
-        self.response = self.client.get(reverse('profile-list'))
+    def test_view_urls_exists_at_desired_location(self):
+        self.assertEqual(self.first_page, '/')
+        self.assertEqual(self.second_page, '/?page=2')
 
-        self.assertContains(self.response, self.a.name)
-        self.assertContains(self.response, b_name)
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(self.first_page)
+        self.assertEqual(response.status_code, 200)
+
+    def test_uses_correct_template(self):
+        response = self.client.get(self.first_page)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'sns/profile_list.html')
+
+    def test_pagination_is_twenty(self):
+        response = self.client.get(self.first_page)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('is_paginated' in response.context)
+        self.assertTrue(response.context['is_paginated'])
+        self.assertTrue(len(response.context['profiles']) == 20)
+
+    def test_lists_all_profiles(self):
+        # Second page should show last five profiles
+        response = self.client.get(self.second_page)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertTrue('is_paginated' in response.context)
+        self.assertTrue(response.context['is_paginated'])
+        self.assertTrue(len(response.context['profiles']) == 5)
+
+    def test_added_profile_name_appears_on_second_page(self):
+        name = 'Harry'
+
+        response = self.client.get(self.second_page)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, name)
+
+        Profile.objects.create(name=name)
+
+        response = self.client.get(self.second_page)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, name)
 
     def test_displays_new_profile_name_after_name_change(self):
-        old_name = self.a.name
-        new_name = 'Harry'
+        old_name = 'Harry'
+        new_name = 'Harris'
 
-        self.assertContains(self.response, old_name)
+        profile = Profile.objects.create(name=old_name)
 
-        self.a.name = new_name
-        self.a.save()
+        response = self.client.get(self.second_page)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, old_name)
+        self.assertNotContains(response, new_name)
 
-        self.response = self.client.get(reverse('profile-list'))
-        self.assertContains(self.response, new_name)
-        self.assertNotContains(self.response, old_name)
+        profile.name = new_name
+        profile.save()
+
+        response = self.client.get(self.second_page)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, old_name)
+        self.assertContains(response, new_name)
 
     def test_name_of_removed_profile_disappears_from_page(self):
-        a_name = self.a.name
+        name = 'Harry'
+        Profile.objects.create(name=name)
 
-        self.assertContains(self.response, a_name)
-        self.a.delete()
-        self.response = self.client.get(reverse('profile-list'))
-        self.assertNotContains(self.response, a_name)
+        response = self.client.get(self.second_page)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, name)
+
+        Profile.objects.filter(name=name).delete()
+
+        response = self.client.get(self.second_page)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, name)
 
 
 class ProfileModelTests(TestCase):
