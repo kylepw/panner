@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from ..forms import ProfileForm
+from ..models import Profile
 
 
 class ProfileFormTests(TestCase):
@@ -23,6 +24,8 @@ class ProfileFormTests(TestCase):
         form = ProfileForm(data={'name': ''})
 
         self.assertFalse(form.is_valid())
+        self.assertIn('name', form.errors.keys())
+        self.assertEqual(form.errors['name'], ["This field is required."])
 
     def test_form_with_only_name(self):
         form = ProfileForm(data={'name': 'Jerry'})
@@ -33,3 +36,16 @@ class ProfileFormTests(TestCase):
         form = ProfileForm(data={'name': 'Jjjjjjjjjjjjjjjjjjjjjerry'})
 
         self.assertFalse(form.is_valid())
+        self.assertIn('name', form.errors.keys())
+        self.assertIn('Ensure this value has at most', form.errors['name'][0])
+
+    def test_add_profile_with_duplicate_name(self):
+        name = 'Harry'
+        profile = Profile.objects.create(name=name)
+        form = ProfileForm(data={'name': name})
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('name', form.errors.keys())
+        self.assertEqual(
+            form.errors['name'], ['Profile with this Name already exists.']
+        )
