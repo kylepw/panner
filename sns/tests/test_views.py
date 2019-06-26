@@ -119,6 +119,7 @@ class ProfileListViewWithoutDataTests(TestCase):
 
 class ProfileDetailView(TestCase):
     def setUp(self):
+
         self.profile = Profile.objects.create(
             name='Harry', facebook='fb@fb.com', twitter='hry318'
         )
@@ -128,6 +129,10 @@ class ProfileDetailView(TestCase):
         self.assertEqual(
             reverse('profile-detail', kwargs={'pk': pk}), f'/profile/{pk}/'
         )
+
+    def test_does_not_render_page_without_pk_value_passed(self):
+        with self.assertRaises(NoReverseMatch):
+            self.client.get(reverse('profile-detail'))
 
     def test_view_renders_an_existing_profile(self):
         pk = self.profile.pk
@@ -147,13 +152,8 @@ class ProfileDetailView(TestCase):
         response = self.client.get(reverse('profile-detail', kwargs={'pk': 100000}))
         self.assertEqual(response.status_code, 404)
 
-    def test_does_not_render_page_without_pk_value_passed(self):
-        with self.assertRaises(NoReverseMatch):
-            self.client.get(reverse('profile-detail'))
-
 
 class ProfileNewTests(TestCase):
-
     def post_profile(self, data=None):
         if data is None:
             return self.client.post(reverse('profile_new'))
@@ -170,7 +170,7 @@ class ProfileNewTests(TestCase):
         self.assertTemplateUsed(response, 'sns/profile_edit.html')
 
     def test_post_form_with_name_and_sns_handle(self):
-        data={'name': 'Harry', 'twitter': 'hry318'}
+        data = {'name': 'Harry', 'twitter': 'hry318'}
         response = self.post_profile(data)
 
         self.assertEqual(response.status_code, 302)
@@ -197,8 +197,58 @@ class ProfileNewTests(TestCase):
         self.assertTemplateUsed(response, 'sns/profile_edit.html')
         self.assertContains(response, 'This field is required.')
 
-class ProfileEditTests(TestCase):
 
-    def test_something(self):
-        pass
-        # self.fail('add tests')
+class ProfileEditTests(TestCase):
+    def setUp(self):
+
+        self.profile = Profile.objects.create(
+            name='Harry', facebook='fb@fb.com', twitter='hry318'
+        )
+
+    def get_profile(self, pk=None):
+        if pk is None:
+            return self.client.get(reverse('profile_edit'))
+        return self.client.get(reverse('profile_edit', kwargs={'pk': pk}))
+
+    def post_profile(self, pk, data=None):
+        if data is None:
+            return self.client.post(reverse('profile_edit', kwargs={'pk': pk}))
+        return self.client.post(reverse('profile_edit', kwargs={'pk': pk}), data=data)
+
+    def test_view_url_exists_at_desired_location(self):
+        pk = self.profile.pk
+        self.assertEqual(
+            reverse('profile_edit', kwargs={'pk': pk}), f'/profile/{pk}/edit/'
+        )
+
+    def test_does_not_render_page_without_pk_value_passed(self):
+        with self.assertRaises(NoReverseMatch):
+            self.get_profile()
+
+    def test_uses_correct_template(self):
+        pk = self.profile.pk
+        response = self.get_profile(pk)
+
+        self.assertTrue(response.status_code, 200)
+        self.assertTemplateUsed(response, 'sns/profile_edit.html')
+
+    def test_get_profile_that_does_not_exist(self):
+        response = self.get_profile(pk=1000)
+        self.assertEqual(response.status_code, 404)
+
+    def test_edit_profile_with_just_name(self):
+        pk = self.profile.pk
+        new_data = {'name': 'Harris'}
+        response = self.post_profile(pk, new_data)
+
+        self.assertTrue(response, 200)
+        self.assertRedirects(response, reverse('profile-detail', kwargs={'pk': pk}))
+        self.assertEqual(Profile.objects.get(pk=pk).name, new_data['name'])
+
+    def test_get_profile_without_name(self):
+        pk = self.profile.pk
+        response = self.post_profile(pk)
+
+        self.assertTrue(response, 200)
+        self.assertTemplateUsed(response, 'sns/profile_edit.html')
+        self.assertContains(response, 'This field is required.')
