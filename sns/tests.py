@@ -54,13 +54,16 @@ class ProfileModelTests(TestCase):
             'twitter': 'jerryinthewild318',
         }
 
-        # DON'T modify this in test methods!!
         cls.a = Profile.objects.create(
             name='Jerry',
             facebook=cls.FIELDS['facebook'],
             reddit=cls.FIELDS['reddit'],
             twitter=cls.FIELDS['twitter'],
         )
+
+    def test_name_label(self):
+        name_label = self.a._meta.get_field('name').verbose_name
+        self.assertEqual(name_label, 'name')
 
     def test_cannot_create_models_with_same_names(self):
         with self.assertRaisesMessage(
@@ -84,6 +87,11 @@ class ProfileModelTests(TestCase):
     def test_name_set_to_None(self):
         with self.assertRaises(IntegrityError):
             Profile.objects.create(name=None)
+
+    def test_facebook_max_length(self):
+        max_length = self.a._meta.get_field('facebook').max_length
+
+        self.assertEqual(max_length, 50)
 
     def test_name_that_is_too_long(self):
         with self.assertRaisesMessage(DataError, 'value too long'):
