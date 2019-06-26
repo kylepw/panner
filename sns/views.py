@@ -11,9 +11,11 @@ class ProfileList(ListView):
     context_object_name = 'profiles'
     paginate_by = 20
 
+
 class ProfileDetail(DetailView):
     model = Profile
     context_object_name = 'profile'
+
 
 def profile_new(request):
     if request.method == 'POST':
@@ -25,9 +27,10 @@ def profile_new(request):
         form = ProfileForm()
     return render(request, 'sns/profile_edit.html', {'form': form})
 
+
 def profile_edit(request, pk):
     profile = get_object_or_404(Profile, pk=pk)
-    if request.method == "POST":
+    if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile)
         if form.is_valid():
             post = form.save()
