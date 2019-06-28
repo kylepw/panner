@@ -6,4 +6,4 @@ from .models import Profile
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['name', 'facebook', 'instagram', 'reddit', 'spotify', 'twitter']
+        fields = ['name', 'reddit', 'spotify', 'twitter']
