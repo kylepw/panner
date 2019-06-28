@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'sns.apps.SnsConfig',
     'facebook.apps.FacebookConfig',
-    'instagram.apps.InstagramConfig',
     'reddit.apps.RedditConfig',
     'spotify.apps.SpotifyConfig',
     'twitter.apps.TwitterConfig',
