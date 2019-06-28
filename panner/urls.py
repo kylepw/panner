@@ -19,6 +19,8 @@ from django.urls import include, path
 urlpatterns = [
     path('', include('sns.urls')),
     path('admin/', admin.site.urls),
+    path('line/', include('line.urls')),
+    path('meetup/', include('meetup.urls')),
     path('reddit/', include('reddit.urls')),
     path('spotify/', include('spotify.urls')),
     path('twitter/', include('twitter.urls')),
