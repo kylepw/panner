@@ -9,14 +9,14 @@ class ProfileFormTests(TestCase):
         form = ProfileForm()
 
         self.assertEqual(form.fields['name'].label, 'Name')
-        self.assertEqual(form.fields['facebook'].label, 'Facebook')
-        self.assertEqual(form.fields['instagram'].label, 'Instagram')
+        self.assertEqual(form.fields['line'].label, 'Line')
+        self.assertEqual(form.fields['meetup'].label, 'Meetup')
         self.assertEqual(form.fields['reddit'].label, 'Reddit')
         self.assertEqual(form.fields['spotify'].label, 'Spotify')
         self.assertEqual(form.fields['twitter'].label, 'Twitter')
 
     def test_form_with_name_and_sns_field(self):
-        form = ProfileForm(data={'name': 'Jerry', 'facebook': 'fb@fb.com'})
+        form = ProfileForm(data={'name': 'Jerry', 'twitter': 'jerrryy12'})
 
         self.assertTrue(form.is_valid())
 
@@ -49,3 +49,8 @@ class ProfileFormTests(TestCase):
         self.assertEqual(
             form.errors['name'], ['Profile with this Name already exists.']
         )
+
+    def test_forms_fields_match_model_fields(self):
+        model_fields = [field for field, _ in Profile().get_fields()]
+        for field in model_fields:
+            self.assertIn(field, ProfileForm().fields)

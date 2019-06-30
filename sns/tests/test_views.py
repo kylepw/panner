@@ -121,7 +121,7 @@ class ProfileDetailView(TestCase):
     def setUp(self):
 
         self.profile = Profile.objects.create(
-            name='Harry', facebook='fb@fb.com', twitter='hry318'
+            name='Harry', reddit='fb@fb.com', twitter='hry318'
         )
 
     def test_view_url_exists_at_desired_location(self):
@@ -202,7 +202,7 @@ class ProfileEditTests(TestCase):
     def setUp(self):
 
         self.profile = Profile.objects.create(
-            name='Harry', facebook='fb@fb.com', twitter='hry318'
+            name='Harry', reddit='fb@fb.com', twitter='hry318'
         )
 
     def get_profile(self, pk=None):

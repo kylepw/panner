@@ -8,14 +8,14 @@ class ProfileModelTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.FIELDS = {
-            'facebook': 'jerry@gmail.com',
+            'meetup': '356770692',
             'reddit': 'jjjjerry',
             'twitter': 'jerryinthewild318',
         }
 
         cls.a = Profile.objects.create(
             name='Jerry',
-            facebook=cls.FIELDS['facebook'],
+            meetup=cls.FIELDS['meetup'],
             reddit=cls.FIELDS['reddit'],
             twitter=cls.FIELDS['twitter'],
         )
@@ -24,13 +24,13 @@ class ProfileModelTests(TestCase):
         name_label = self.a._meta.get_field('name').verbose_name
         self.assertEqual(name_label, 'name')
 
-    def test_facebook_label(self):
-        name_label = self.a._meta.get_field('facebook').verbose_name
-        self.assertEqual(name_label, 'facebook')
+    def test_line_label(self):
+        name_label = self.a._meta.get_field('line').verbose_name
+        self.assertEqual(name_label, 'line')
 
-    def test_instagram_label(self):
-        name_label = self.a._meta.get_field('instagram').verbose_name
-        self.assertEqual(name_label, 'instagram')
+    def test_meetup_label(self):
+        name_label = self.a._meta.get_field('meetup').verbose_name
+        self.assertEqual(name_label, 'meetup')
 
     def test_reddit_label(self):
         name_label = self.a._meta.get_field('reddit').verbose_name
@@ -72,15 +72,15 @@ class ProfileModelTests(TestCase):
 
         self.assertEqual(max_length, 20)
 
-    def test_facebook_max_length(self):
-        max_length = self.a._meta.get_field('facebook').max_length
+    def test_line_max_length(self):
+        max_length = self.a._meta.get_field('line').max_length
 
-        self.assertEqual(max_length, 50)
+        self.assertEqual(max_length, 32)
 
-    def test_instagram_max_length(self):
-        max_length = self.a._meta.get_field('instagram').max_length
+    def test_meetup_max_length(self):
+        max_length = self.a._meta.get_field('meetup').max_length
 
-        self.assertEqual(max_length, 30)
+        self.assertEqual(max_length, 20)
 
     def test_reddit_max_length(self):
         max_length = self.a._meta.get_field('reddit').max_length
