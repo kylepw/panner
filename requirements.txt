@@ -1,9 +1,10 @@
 -i https://pypi.org/simple
-certifi==2019.3.9
+certifi==2019.6.16
 chardet==3.0.4
-django==2.2.2
+django==2.2.3
 idna==2.8
 oauthlib==3.0.1
+psycopg2==2.8.3
 pysocks==1.7.0
 pytz==2019.1
 requests-oauthlib==1.2.0

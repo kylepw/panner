@@ -4,11 +4,14 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+coverage = "*"
 
 [packages]
 tweepy = "*"
 django = "*"
 requests = "*"
+psycopg2 = "*"
+requests-oauthlib = "*"
 
 [requires]
 python_version = "3.7"
