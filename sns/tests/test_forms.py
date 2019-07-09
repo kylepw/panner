@@ -9,7 +9,6 @@ class ProfileFormTests(TestCase):
         form = ProfileForm()
 
         self.assertEqual(form.fields['name'].label, 'Name')
-        self.assertEqual(form.fields['line'].label, 'Line')
         self.assertEqual(form.fields['meetup'].label, 'Meetup')
         self.assertEqual(form.fields['reddit'].label, 'Reddit')
         self.assertEqual(form.fields['spotify'].label, 'Spotify')

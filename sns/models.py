@@ -4,7 +4,6 @@ from django.urls import reverse
 
 class Profile(models.Model):
     name = models.CharField(max_length=20, unique=True)
-    line = models.CharField(max_length=32, blank=True)
     meetup = models.CharField(max_length=20, blank=True)
     reddit = models.CharField(max_length=20, blank=True)
     spotify = models.CharField(max_length=30, blank=True)

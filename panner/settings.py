@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'sns.apps.SnsConfig',
-    'line.apps.LineConfig',
     'meetup.apps.MeetupConfig',
     'reddit.apps.RedditConfig',
     'spotify.apps.SpotifyConfig',

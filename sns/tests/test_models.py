@@ -24,10 +24,6 @@ class ProfileModelTests(TestCase):
         name_label = self.a._meta.get_field('name').verbose_name
         self.assertEqual(name_label, 'name')
 
-    def test_line_label(self):
-        name_label = self.a._meta.get_field('line').verbose_name
-        self.assertEqual(name_label, 'line')
-
     def test_meetup_label(self):
         name_label = self.a._meta.get_field('meetup').verbose_name
         self.assertEqual(name_label, 'meetup')
@@ -71,11 +67,6 @@ class ProfileModelTests(TestCase):
         max_length = self.a._meta.get_field('name').max_length
 
         self.assertEqual(max_length, 20)
-
-    def test_line_max_length(self):
-        max_length = self.a._meta.get_field('line').max_length
-
-        self.assertEqual(max_length, 32)
 
     def test_meetup_max_length(self):
         max_length = self.a._meta.get_field('meetup').max_length
