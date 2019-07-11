@@ -12,6 +12,7 @@ django = "*"
 requests = "*"
 psycopg2 = "*"
 requests-oauthlib = "*"
+praw = "*"
 
 [requires]
 python_version = "3.7"
