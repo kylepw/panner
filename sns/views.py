@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
@@ -43,3 +44,15 @@ def profile_edit(request, pk):
 def activity(request, pk):
     profile = get_object_or_404(Profile, pk=pk)
     return render(request, 'sns/activity.html', {'profile': profile})
+
+
+def profile_search(request):
+    query = request.GET.get('profile_query')
+    if query:
+        try:
+            profile = Profile.objects.get(name=query)
+            return redirect('activity', pk=profile.pk)
+        except Profile.DoesNotExist:
+            messages.error(request, "'%s' doesn't exist. Try again." % query)
+            return redirect('profile_search')
+    return render(request, 'sns/profile_search.html')

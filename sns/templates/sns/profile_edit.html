@@ -1,9 +1,9 @@
 {% extends "sns/base.html" %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}Person{% endblock %}
 
 {% block body %}
-  <h2>Profile</h2>
+  <h2>Person</h2>
   <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
