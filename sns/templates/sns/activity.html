@@ -2,8 +2,8 @@
 
 {% block title %}{{ profile.name }}'s SNS Activity{% endblock %}
 
-{% block content %}
+{% block body %}
 <h2>{{ profile.name }}'s SNS Activity</h2>
-<p></p><a href="{% url 'profile-detail' pk=profile.pk %}">Back to Profile</a></p>
+<p><a href="{% url 'profile-detail' pk=profile.pk %}">Back to Profile</a></p>
 Nothing yet.
 {% endblock %}
