@@ -38,3 +38,8 @@ def profile_edit(request, pk):
     else:
         form = ProfileForm(instance=profile)
     return render(request, 'sns/profile_edit.html', {'form': form})
+
+
+def activity(request, pk):
+    profile = get_object_or_404(Profile, pk=pk)
+    return render(request, 'sns/activity.html', {'profile': profile})

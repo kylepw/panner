@@ -4,6 +4,7 @@
 
 {% block content %}
 <h2>{{ profile.name }}'s SNS Profile</h2>
+<h4><a href="{% url 'activity' pk=profile.pk %}">Activity</a></h4>
 <a href="{% url 'profile_edit' pk=profile.pk %}">Edit</a>
 <ul>
   {% for sns, value in profile.get_fields %}
