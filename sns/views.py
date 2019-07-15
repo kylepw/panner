@@ -54,6 +54,6 @@ def profile_search(request):
             return redirect('activity', pk=profile.pk)
         except Profile.DoesNotExist:
             messages.error(request, "'%s' doesn't exist. Try again." % query)
-            return redirect('profile_search')
+            return redirect(request.META.get('HTTP_REFERER', 'profile_search'))
     profile_exists = Profile.objects.all().exists()
     return render(request, 'sns/profile_search.html', {'profile_exists': profile_exists})
