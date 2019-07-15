@@ -3,19 +3,19 @@
 {% block title %}{{ profile.name }}'s SNS Activity{% endblock %}
 
 {% block body %}
-<div class="container mt-3">
-  <div class="row text-center mb-1">
+<div class="container mt-3 text-center">
+  <div class="row mb-1">
     <div class="col">
       <h2>{{ profile.name }}'s Activity</h2>
     </div>
   </div>
-  <div class="row text-center">
+  <div class="row">
     <div class="col">
       <a class="text-info" href="{% url 'profile_edit' pk=profile.pk %}">Edit</a></p>
     </div>
   </div>
   {% for sns, value in profile.get_fields %}
-  <div class="row text-center"></div>
+  <div class="row"></div>
     <div class="col">
     {{ sns }} {% if value %}({{ value }}){% endif %}
     </div>
