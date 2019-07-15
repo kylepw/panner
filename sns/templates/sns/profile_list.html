@@ -10,17 +10,40 @@
     </div>
   </div>
   <div class="row justify-content-center">
-    <div class="col">
     {% if not profiles %}
+    <div class="col">
       No profiles to display.
-    {% else %}
-      <ul>
-      {% for p in profiles %}
-        <li><a class="text-info" href="{% url 'activity' pk=p.pk %}">{{ p.name }}</a></li>
-      {% endfor %}
-      </ul>
-    {% endif %}
     </div>
+    {% else %}
+    {% for p in profiles %}
+    <div class="col">
+        <div class="card my-4">
+          <div class="card-header">
+            <a class="card-link text-info text-center" href="{% url 'activity' p.pk %}">
+              <h4>{{ p.name }}</h4>
+            </a>
+          </div>
+          <ul class="list-group list-group-flush">
+          {% for sns, value in p.get_fields %}
+            {% if value %}
+            <li class="list-group-item">
+              <i>{{ value }}</i> ({{ sns }})
+            </li>
+            {% endif %}
+          {% endfor %}
+          </ul>
+          <div class="card-body small">
+            <div class="col mb-2">
+              <a class="card-link" href="{% url 'profile_edit' pk=p.pk %}">Edit</a>
+            </div>
+            <div class="col">
+              <a class="card-link" href="">Remove</a>
+            </div>
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
   </div>
 </div>
 {% endblock %}
