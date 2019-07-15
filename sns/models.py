@@ -16,7 +16,7 @@ class Profile(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('profile-detail', args=[str(self.id)])
+        return reverse('activity', args=[str(self.id)])
 
     def get_fields(self):
         return [

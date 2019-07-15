@@ -14,10 +14,12 @@
       <a class="text-info" href="{% url 'profile_edit' pk=profile.pk %}">Edit</a></p>
     </div>
   </div>
-  <div class="row text-center">
-      <div class="col">
-        Nothing yet.
-      </div>
+  {% for sns, value in profile.get_fields %}
+  <div class="row text-center"></div>
+    <div class="col">
+    {{ sns }} {% if value %}({{ value }}){% endif %}
     </div>
+  </div>
+  {% endfor %}
 </div>
 {% endblock %}

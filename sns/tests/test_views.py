@@ -19,8 +19,8 @@ class ProfileListViewWithDataTests(TestCase):
         cls.second_page = reverse('profile-list') + '?page=2'
 
     def test_view_urls_exists_at_desired_location(self):
-        self.assertEqual(self.first_page, '/')
-        self.assertEqual(self.second_page, '/?page=2')
+        self.assertEqual(self.first_page, '/profiles/')
+        self.assertEqual(self.second_page, '/profiles/?page=2')
 
     def test_view_url_accessible_by_name(self):
         response = self.client.get(self.first_page)
@@ -117,7 +117,7 @@ class ProfileListViewWithoutDataTests(TestCase):
         self.assertEqual(len(self.response.context['profiles']), 0)
 
 
-class ProfileDetailView(TestCase):
+class ActivityView(TestCase):
     def setUp(self):
 
         self.profile = Profile.objects.create(
@@ -127,29 +127,29 @@ class ProfileDetailView(TestCase):
     def test_view_url_exists_at_desired_location(self):
         pk = self.profile.pk
         self.assertEqual(
-            reverse('profile-detail', kwargs={'pk': pk}), f'/profile/{pk}/'
+            reverse('activity', kwargs={'pk': pk}), f'/profile/{pk}/'
         )
 
     def test_does_not_render_page_without_pk_value_passed(self):
         with self.assertRaises(NoReverseMatch):
-            self.client.get(reverse('profile-detail'))
+            self.client.get(reverse('activity'))
 
     def test_view_renders_an_existing_profile(self):
         pk = self.profile.pk
-        response = self.client.get(reverse('profile-detail', kwargs={'pk': pk}))
+        response = self.client.get(reverse('activity', kwargs={'pk': pk}))
         self.assertEqual(response.status_code, 200)
         self.assertTrue('profile' in response.context)
         self.assertEqual(response.context['profile'], self.profile)
 
     def test_view_uses_correct_template(self):
         pk = self.profile.pk
-        response = self.client.get(reverse('profile-detail', kwargs={'pk': pk}))
+        response = self.client.get(reverse('activity', kwargs={'pk': pk}))
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'sns/profile_detail.html')
+        self.assertTemplateUsed(response, 'sns/activity.html')
 
     def test_does_not_render_nonexisting_profile(self):
-        response = self.client.get(reverse('profile-detail', kwargs={'pk': 100000}))
+        response = self.client.get(reverse('activity', kwargs={'pk': 100000}))
         self.assertEqual(response.status_code, 404)
 
 
@@ -175,7 +175,7 @@ class ProfileNewTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         pk = Profile.objects.get(name=data['name']).pk
-        self.assertRedirects(response, reverse('profile-detail', kwargs={'pk': pk}))
+        self.assertRedirects(response, reverse('activity', kwargs={'pk': pk}))
 
     def test_post_form_with_only_name(self):
         name = 'Harry'
@@ -183,7 +183,7 @@ class ProfileNewTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         pk = Profile.objects.get(name=name).pk
-        self.assertRedirects(response, reverse('profile-detail', kwargs={'pk': pk}))
+        self.assertRedirects(response, reverse('activity', kwargs={'pk': pk}))
 
     def test_post_form_with_only_twitter_handle(self):
         response = self.post_profile({'twitter': 'hry318'})
@@ -242,7 +242,7 @@ class ProfileEditTests(TestCase):
         response = self.post_profile(pk, new_data)
 
         self.assertTrue(response, 200)
-        self.assertRedirects(response, reverse('profile-detail', kwargs={'pk': pk}))
+        self.assertRedirects(response, reverse('activity', kwargs={'pk': pk}))
         self.assertEqual(Profile.objects.get(pk=pk).name, new_data['name'])
 
     def test_get_profile_without_name(self):

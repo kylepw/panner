@@ -13,9 +13,10 @@ class ProfileList(ListView):
     paginate_by = 20
 
 
-class ProfileDetail(DetailView):
+class Activity(DetailView):
     model = Profile
     context_object_name = 'profile'
+    template_name = "sns/activity.html"
 
 
 def profile_new(request):
@@ -23,7 +24,7 @@ def profile_new(request):
         form = ProfileForm(request.POST)
         if form.is_valid():
             post = form.save()
-            return redirect('profile-detail', pk=post.pk)
+            return redirect('activity', pk=post.pk)
     else:
         form = ProfileForm()
     return render(request, 'sns/profile_edit.html', {'form': form})
@@ -35,15 +36,10 @@ def profile_edit(request, pk):
         form = ProfileForm(request.POST, instance=profile)
         if form.is_valid():
             post = form.save()
-            return redirect('profile-detail', pk=post.pk)
+            return redirect('activity', pk=post.pk)
     else:
         form = ProfileForm(instance=profile)
     return render(request, 'sns/profile_edit.html', {'form': form})
-
-
-def activity(request, pk):
-    profile = get_object_or_404(Profile, pk=pk)
-    return render(request, 'sns/activity.html', {'profile': profile})
 
 
 def profile_search(request):
