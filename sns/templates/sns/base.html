@@ -20,8 +20,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="navbar-nav">
-          <a class="nav-item nav-link" href="{% url 'profile_new' %}">+</a>
-          <a class="nav-item nav-link" href="{% url 'profile-list' %}">People</a>
+          <a class="btn btn-info btn-sm nav-item nav-link" role="button" title="Add someone new" href="{% url 'profile_new' %}">+</button>
+          <!-- <a class="nav-item nav-link" href="{% url 'profile_new' %}">+</a> -->
+          <a class="nav-item nav-link" title="See everyone" href="{% url 'profile-list' %}">People</a>
         </div>
       </div>
       {% block search %}
