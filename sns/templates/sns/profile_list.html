@@ -3,14 +3,24 @@
 {% block title %}People{% endblock %}
 
 {% block body %}
-  <h2>People</h2>
-  {% if not profiles %}
-  No profiles to display.
-  {% else %}
-  <ul>
-    {% for p in profiles %}
-    <li><a class="text-info" href="{% url 'profile-detail' pk=p.pk %}">{{ p.name }}</a></li>
-    {% endfor %}
-  </ul>
-  {% endif %}
+<div class="container mt-3">
+  <div class="row mb-1">
+    <div class="col">
+      <h2>People</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+    {% if not profiles %}
+      No profiles to display.
+    {% else %}
+      <ul>
+      {% for p in profiles %}
+        <li><a class="text-info" href="{% url 'profile-detail' pk=p.pk %}">{{ p.name }}</a></li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -3,7 +3,21 @@
 {% block title %}{{ profile.name }}'s SNS Activity{% endblock %}
 
 {% block body %}
-<h2>{{ profile.name }}'s SNS Activity</h2>
-<p><a class="text-info" href="{% url 'profile-detail' pk=profile.pk %}">Back to Profile</a></p>
-Nothing yet.
+<div class="container mt-3">
+  <div class="row text-center mb-1">
+    <div class="col">
+      <h2>{{ profile.name }}'s Activity</h2>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <a class="text-info" href="{% url 'profile_edit' pk=profile.pk %}">Edit</a></p>
+    </div>
+  </div>
+  <div class="row text-center">
+      <div class="col">
+        Nothing yet.
+      </div>
+    </div>
+</div>
 {% endblock %}
