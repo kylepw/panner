@@ -2,14 +2,20 @@
 
 {% block title %}Panner{% endblock %}
 
+{% block search %}{% endblock %}
+
 {% block body %}
 <div class="container" style="height:60vh;">
   <div class="row h-100 justify-content-center align-items-center">
+    {% if not profile_exists %}
     <div class="col-5">
       <form action="{% url 'profile_search' %}" method="get">
           <input class="form-control" type="search" name="profile_query" placeholder="Check on a friend..." autofocus="autofocus">
       </form>
     </div>
+    {% else %}
+    <a class="btn btn-outline-info btn-lg"href="{% url 'profile_new' %}">Add a Person</a>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

@@ -14,7 +14,7 @@
   <body>
     <!-- Nav bar -->
     <nav class="navbar navbar-expand-sm navbar-dark bg-info">
-      <a class="navbar-brand" href="{% url 'profile_search' %}">P</a>
+      <a class="navbar-brand" href="{% url 'profile_search' %}">Panner</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
       </button>
@@ -24,9 +24,11 @@
           <a class="nav-item nav-link" href="{% url 'profile-list' %}">People</a>
         </div>
       </div>
+      {% block search %}
       <form class="form-inline" action="{% url 'profile_search' %}" method="get">
         <input class="form-control mr-sm-2" type="search" name="profile_query" aria-label="Check on a friend...">
       </form>
+      {% endblock %}
     </nav>
 
     {% if messages %}

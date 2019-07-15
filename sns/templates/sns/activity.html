@@ -2,6 +2,8 @@
 
 {% block title %}{{ profile.name }}'s SNS Activity{% endblock %}
 
+{% block search %}{% endblock %}
+
 {% block body %}
 <h2>{{ profile.name }}'s SNS Activity</h2>
 <p><a class="text-info" href="{% url 'profile-detail' pk=profile.pk %}">Back to Profile</a></p>
