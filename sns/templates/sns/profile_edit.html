@@ -3,6 +3,13 @@
 {% block title %}Person{% endblock %}
 
 {% block body %}
+<div class="field-errors">
+{% for field in form %}
+  {% if field.errors %}
+  <div class="alert alert-warning" role="alert">{{ field.errors }}</div>
+  {% endif %}
+{% endfor %}
+</div>
 <div class="container mt-3">
   <div class="row justify-content-center text-center mb-1">
     <div class="col-9 col-sm-9 col-md-7 col-lg-5 col-xl-4">
@@ -15,7 +22,6 @@
           {% csrf_token %}
           {% for field in form %}
           <div class="form-group">
-            {{ field.errors }}
             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{ field }}
             {% if field.help_text %}
