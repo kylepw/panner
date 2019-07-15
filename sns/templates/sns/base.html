@@ -32,11 +32,13 @@
     </nav>
 
     {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
+    <div class="messages">
+      {% for msg in messages %}
+        <div class="alert alert-warning" role="alert">
+          {{msg.message}}
+        </div>
+      {% endfor %}
+    </div>
     {% endif %}
 
     {% block body %}{% endblock %}
