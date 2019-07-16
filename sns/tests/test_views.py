@@ -252,3 +252,46 @@ class ProfileEditTests(TestCase):
         self.assertTrue(response, 200)
         self.assertTemplateUsed(response, 'sns/profile_edit.html')
         self.assertContains(response, 'This field is required.')
+
+
+class ProfileDeleteTests(TestCase):
+    def setUp(self):
+
+        self.profile = Profile.objects.create(
+            name='Harry', reddit='fb@fb.com', twitter='hry318'
+        )
+
+    def del_profile(self, pk=None):
+        if pk is None:
+            return self.client.get(reverse('profile_delete'))
+        return self.client.get(reverse('profile_delete', kwargs={'pk': pk}))
+
+    def test_view_url_exists_at_desired_location(self):
+        pk = self.profile.pk
+        self.assertEqual(
+            reverse('profile_delete', kwargs={'pk': pk}), f'/profile/{pk}/del/'
+        )
+
+    def test_does_not_render_page_without_pk_value_passed(self):
+        with self.assertRaises(NoReverseMatch):
+            self.del_profile()
+
+    def test_redirects_to_correct_template(self):
+        pk = self.profile.pk
+        response = self.del_profile(pk)
+
+        self.assertTrue(response.status_code, 200)
+        self.assertRedirects(response, reverse('profile-list'))
+
+    def test_get_profile_that_does_not_exist(self):
+        response = self.del_profile(pk=1000)
+        self.assertEqual(response.status_code, 404)
+
+    def test_instance_is_properly_deleted(self):
+        pk = self.profile.pk
+        self.assertTrue(Profile.objects.filter(pk=pk).exists())
+        response = self.del_profile(pk)
+        self.assertTrue(response.status_code, 200)
+        self.assertFalse(Profile.objects.filter(pk=pk).exists())
+
+
