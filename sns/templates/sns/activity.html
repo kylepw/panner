@@ -23,7 +23,13 @@
         <div class="card-body">
           <div class="card-title text-muted">{{ acct|truncatechars:20 }}</div>
           {% if sns == 'twitter' %}
-          <div class="card-text">{{ twitter }}</div>
+          <div class="card-text">
+            <ul class="list-group list-group-flush">
+            {% for tweet in twitter %}
+              <li class="list-group-item"><pre>{{ tweet|truncatechars:120 }}</pre></li>
+            {% endfor %}
+            </ul>
+          </div>
           {% else %}
           <div class="card-text">Content.</div>
           {% endif %}
