@@ -31,7 +31,7 @@
             {% for sns, value in p.get_fields %}
               {% if value %}
               <li class="list-group-item">
-                <i>{{ value }}</i> ({{ sns }})
+                <b>{{ sns }}</b> <i>{{ value|truncatechars:12 }}</i>
               </li>
               {% endif %}
             {% endfor %}
