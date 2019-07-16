@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
 
+from .api.utils import get_tweets
 from .forms import ProfileForm
 from .models import Profile
 
@@ -17,6 +18,12 @@ class Activity(DetailView):
     model = Profile
     context_object_name = 'profile'
     template_name = "sns/activity.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if context['profile'].twitter:
+            context['twitter'] = get_tweets(context['profile'].twitter)
+        return context
 
 
 def profile_new(request):

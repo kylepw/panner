@@ -22,7 +22,11 @@
         <h5 class="card-header"><a class="card-link text-info" href="https://{{ sns }}.com" target="_blank">{{ sns }}</a></h5>
         <div class="card-body">
           <div class="card-title text-muted">{{ acct|truncatechars:20 }}</div>
+          {% if sns == 'twitter' %}
+          <div class="card-text">{{ twitter }}</div>
+          {% else %}
           <div class="card-text">Content.</div>
+          {% endif %}
         </div>
       </div>
     </div>
