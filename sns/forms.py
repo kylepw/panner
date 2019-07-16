@@ -9,6 +9,7 @@ class ProfileForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for _, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control'})
+        self.fields['name'].widget.attrs.update({'autofocus': ''})
 
     class Meta:
         model = Profile
