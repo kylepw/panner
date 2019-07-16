@@ -9,19 +9,25 @@
       <h2>{{ profile.name }}'s Activity</h2>
     </div>
     <div class="col-auto">
-      <a class="card-link text-info" href="{% url 'profile_edit' pk=profile.pk %}">
-        <span class="oi oi-pencil"></span>
-      </a>
+        <a class="card-link text-info" href="{% url 'profile_edit' pk=profile.pk %}">
+          <span class="oi oi-pencil"></span>
+        </a>
     </div>
   </div>
-  {% for sns, value in profile.get_fields %}
-
-
-  <div class="row">
-    <div class="col">
-    {{ sns }} {% if value %}({{ value }}){% endif %}
+  <div class="row justify-content-center">
+  {% for sns, acct in profile.get_fields %}
+  {% if acct %}
+    <div class="col-auto">
+      <div class="card my-4">
+        <h5 class="card-header"><a class="card-link text-info" href="https://{{ sns }}.com" target="_blank">{{ sns }}</a></h5>
+        <div class="card-body">
+          <div class="card-title text-muted">{{ acct|truncatechars:20 }}</div>
+          <div class="card-text">Content.</div>
+        </div>
+      </div>
     </div>
-  </div>
+  {% endif %}
   {% endfor %}
+  </div>
 </div>
 {% endblock %}
