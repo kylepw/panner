@@ -16,13 +16,16 @@
     </div>
     {% else %}
     {% for p in profiles %}
-    <div class="col">
+    <div class="col-auto">
         <div class="card my-4">
-          <div class="card-header">
-            <a class="card-link text-info text-center" data-toggle="collapse" href="#body_{{ p.pk }}" role="button" aria-expanded="false" aria-controls="body_{{ p.pk }}">
-              <h4>{{ p.name }}</h4>
-            </a>
-          </div>
+              <div class="card-header">
+                <div class="d-flex justify-content-center">
+                  <a class="card-link text-info mr-3" data-toggle="collapse" href="#body_{{ p.pk }}" role="button" aria-expanded="false" aria-controls="body_{{ p.pk }}">
+                    <h4>{{ p.name }}</h4>
+                  </a>
+                  <small><a class="card-link text-info" href="{% url 'profile_edit' pk=p.pk %}"><span class="oi oi-pencil"></span></a></small>
+                </div>
+              </div>
           <div class="collapse" id="body_{{ p.pk }}">
             <ul class="list-group list-group-flush">
             {% for sns, value in p.get_fields %}
@@ -37,6 +40,7 @@
               <div class="col mb-2">
                 <a class="card-link" href="{% url 'activity' pk=p.pk %}">View</a>
               </div>
+              <span class="oi oi-pencil"></span>
               <div class="col mb-2">
                 <a class="card-link" href="{% url 'profile_edit' pk=p.pk %}">Edit</a>
               </div>
