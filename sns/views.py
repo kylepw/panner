@@ -24,6 +24,7 @@ def profile_new(request):
         form = ProfileForm(request.POST)
         if form.is_valid():
             post = form.save()
+            messages.add_message(request, messages.SUCCESS, "Added '%s'." % post.name)
             return redirect('activity', pk=post.pk)
     else:
         form = ProfileForm()
@@ -36,10 +37,19 @@ def profile_edit(request, pk):
         form = ProfileForm(request.POST, instance=profile)
         if form.is_valid():
             post = form.save()
+            messages.add_message(request, messages.SUCCESS, "Changes to '%s' saved." % post.name)
             return redirect('activity', pk=post.pk)
     else:
         form = ProfileForm(instance=profile)
     return render(request, 'sns/profile_edit.html', {'form': form})
+
+
+def profile_delete(request, pk):
+    profile = get_object_or_404(Profile, pk=pk)
+    name = profile.name
+    profile.delete()
+    messages.add_message(request, messages.SUCCESS, "Deleted '%s'." % name)
+    return redirect('profile-list')
 
 
 def profile_search(request):

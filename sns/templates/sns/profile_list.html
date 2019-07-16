@@ -37,7 +37,7 @@
               <a class="card-link" href="{% url 'profile_edit' pk=p.pk %}">Edit</a>
             </div>
             <div class="col">
-              <a class="card-link" href="">Remove</a>
+              <a class="card-link" href="{% url 'profile_delete' pk=p.pk %}">Delete</a>
             </div>
           </div>
         </div>
