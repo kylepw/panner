@@ -20,28 +20,25 @@
         <div class="card my-4">
           <div class="card-header">
             <div class="d-flex justify-content-center">
-              <a class="card-link text-info mr-4" href="{% url 'activity' pk=p.pk %}" title="View activity">
+              <a class="card-link text-info mr-2" href="{% url 'activity' pk=p.pk %}" title="View activity">
                 <h4>{{ p.name }}</h4>
               </a>
-              <small>
-                <a class="card-link text-info" data-toggle="collapse" href="#body_{{ p.pk }}" role="button" aria-expanded="false" aria-controls="body_{{ p.pk }}" title="View accounts">
+                <a class="card-link text-info small" data-toggle="collapse" href="#body_{{ p.pk }}" role="button" aria-expanded="false" aria-controls="body_{{ p.pk }}" title="View accounts">
                   <span class="oi oi-caret-bottom"></span>
                 </a>
-              </small>
             </div>
           </div>
           <div class="collapse" id="body_{{ p.pk }}">
-            <ul class="list-group list-group-flush">
+            <dl class="row-auto mt-2 ml-2">
             {% for sns, value in p.get_fields %}
-              {% if value %}
-              <li class="list-group-item">
-                <b>{{ sns }}</b> <i>{{ value|truncatechars:12 }}</i>
-              </li>
-              {% endif %}
+            {% if value %}
+              <dt class="col-auto">{{ sns }}</dt>
+              <dd class="col">{{ value|truncatechars:15 }}</dd>
+            {% endif %}
             {% endfor %}
-            </ul>
+            </dl>
             <div class="card-body small">
-              <div class="col text-right mb-2">
+              <div class="col text-right mx-3">
                 <a class="card-link text-info" href="{% url 'profile_edit' pk=p.pk %}"><span class="oi oi-pencil"></span></a>
                 <a class="card-link text-info" href="{% url 'profile_delete' pk=p.pk %}"><span class="oi oi-trash"></span></a>
               </div>
