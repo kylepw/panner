@@ -24,17 +24,22 @@
         <div class="card-body">
           <div class="card-title text-muted">{{ acct|truncatechars:20 }}</div>
           <div class="card-text">
+            {% if sns == 'spotify' %}
+            <div class="row">
+              {% for d in data|get_sns:sns|dictsortreversed:'created' %}
+              <div class="col-auto">
+                <a href="{{ d.external_urls.spotify }}" target="_blank"><img class="mb-3" src="{{ d.images.0.url}} " height="100" title="{{ d.name }}" alt="{{ d.name }}"/></a>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
             <ul class="list-group list-group-flush">
-            {% for d in data|get_sns:sns|dictsortreversed:'created' %}
+              {% for d in data|get_sns:sns|dictsortreversed:'created' %}
               {% if sns == 'reddit' %}
               <li class="list-group-item small">
                 <div class="row-auto"><a class="font-weight-bold" href="{{ d.url }}" target="_blank">{{ d.title }}</a> on <a class="font-weight-bold" href="https://www.reddit.com/{{ d.subreddit }}" target="_blank">{{ d.subreddit }}</a></div>
                 <div class="row-auto mb-2 text-muted">{{ d.created|timesince }} ago</div>
                 <div class="row-auto"><pre>{{ d.text|truncatechars_html:120|safe }}</pre></div>
-              </li>
-              {% elif sns == 'spotify' %}
-              <li class="list-group-item small">
-                <a href="{{ d.external_urls.spotify }}" target="_blank"><img src="{{ d.images.0.url}} " height="100" title="{{ d.name }}" alt="{{ d.name }}"/></a>
               </li>
               {% else %}
               <li class="list-group-item small">
@@ -46,6 +51,7 @@
               <li class="list-group-item small">No data.</li>
             {% endfor %}
             </ul>
+            {% endif %}
           </div>
         </div>
       </div>
