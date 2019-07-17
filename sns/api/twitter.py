@@ -5,7 +5,7 @@ import tweepy
 logger = logging.getLogger(__name__)
 
 
-class TwitterAPI:
+class Twitter:
     _CONSUMER_KEY = os.getenv('TWITTER_CONSUMER_KEY')
     _CONSUMER_SECRET_KEY = os.getenv('TWITTER_CONSUMER_SECRET_KEY')
 

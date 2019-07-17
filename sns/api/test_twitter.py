@@ -1,16 +1,16 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from .twitter import logging, os, tweepy, TwitterAPI
+from .twitter import logging, os, tweepy, Twitter
 
 logger = logging.getLogger('twitter')
 
 
-class TwitterAPITests(TestCase):
+class TwitterTests(TestCase):
 
     def setUp(self):
-        patch_consumer_key = patch.object(TwitterAPI, '_CONSUMER_KEY')
-        patch_secret_key = patch.object(TwitterAPI, '_CONSUMER_SECRET_KEY')
+        patch_consumer_key = patch.object(Twitter, '_CONSUMER_KEY')
+        patch_secret_key = patch.object(Twitter, '_CONSUMER_SECRET_KEY')
         patch_appauth = patch('tweepy.AppAuthHandler')
         patch_api = patch('tweepy.API')
 
@@ -25,7 +25,7 @@ class TwitterAPITests(TestCase):
         self.addCleanup(patch_api.stop)
 
     def test_tweepy_objects_called_when_making_api_instance(self):
-        TwitterAPI()
+        Twitter()
 
         self.mock_appauth.assert_called_once_with(
             self.mock_consumer_key,
@@ -35,7 +35,7 @@ class TwitterAPITests(TestCase):
 
     def test_cursor_called_when_get_tweets_called(self):
         id = '123'
-        api = TwitterAPI()
+        api = Twitter()
 
         with patch('tweepy.Cursor') as mock_cursor:
             api.get_tweets(id)
@@ -44,7 +44,7 @@ class TwitterAPITests(TestCase):
 
     @patch.object(logger, 'exception')
     def test_nothing_returned_when_exception_called(self, mock_exception):
-        api = TwitterAPI()
+        api = Twitter()
 
         with patch('tweepy.Cursor', side_effect=mock_exception) as mock_cursor:
             api.get_tweets('123')
