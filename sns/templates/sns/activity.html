@@ -1,4 +1,5 @@
 {% extends "sns/base.html" %}
+{% load sns_tags %}
 
 {% block title %}{{ profile.name }}'s SNS Activity{% endblock %}
 
@@ -22,11 +23,11 @@
         <h5 class="card-header"><a class="card-link text-info" href="https://{{ sns }}.com" target="_blank">{{ sns }}</a></h5>
         <div class="card-body">
           <div class="card-title text-muted">{{ acct|truncatechars:20 }}</div>
-          {% if sns == 'twitter' %}
+          {% if sns in data %}
           <div class="card-text">
             <ul class="list-group list-group-flush">
-            {% for tweet in twitter %}
-              <li class="list-group-item small"><pre>{{ tweet|truncatechars_html:120 }}</pre></li>
+            {% for d in data|get_sns:sns %}
+              <li class="list-group-item small"><pre>{{ d|truncatechars_html:120 }}</pre></li>
             {% endfor %}
             </ul>
           </div>

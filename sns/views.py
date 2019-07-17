@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
 
-from .api.utils import twitter_activity
+from .api.utils import get_activity
 from .forms import ProfileForm
 from .models import Profile
 
@@ -21,8 +21,9 @@ class Activity(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if context['profile'].twitter:
-            context['twitter'] = twitter_activity(context['profile'].twitter)
+        context['data'] = {}
+        for sns, acct in context['profile'].get_fields():
+            context['data'][sns] = get_activity(sns, acct)
         return context
 
 
