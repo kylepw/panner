@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 import os
 import tweepy
@@ -19,7 +20,7 @@ class Twitter:
         try:
             tweets = []
             for t in tweepy.Cursor(self.api.user_timeline, id=id).items(num):
-                tweets.append(t.text)
+                tweets.append({'text': t.text, 'created': t.created_at})
             return tweets
         except tweepy.TweepError:
             logger.exception('Error! Failed to get tweets.')

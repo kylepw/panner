@@ -16,9 +16,7 @@ def get_comments_submissions(username):
             text=comment.body_html,
             subreddit=comment.subreddit_name_prefixed,
             url=comment.link_url,
-            created=datetime.utcfromtimestamp(int(comment.created)).strftime(
-                '%Y-%m-%d %H:%M:%S'
-            ),
+            created=datetime.utcfromtimestamp(comment.created),
         )
         for comment in reddit.redditor(username).comments.new(limit=5)
     ]
@@ -28,9 +26,7 @@ def get_comments_submissions(username):
             text=submission.selftext_html,
             subreddit=submission.subreddit_name_prefixed,
             url=submission.url,
-            created=datetime.utcfromtimestamp(int(submission.created)).strftime(
-                '%Y-%m-%d %H:%M:%S'
-            ),
+            created=datetime.utcfromtimestamp(submission.created),
         )
         for submission in reddit.redditor(username).submissions.new(limit=5)
     ]

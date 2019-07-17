@@ -18,15 +18,26 @@
   <div class="row justify-content-center">
   {% for sns, acct in profile.get_fields %}
   {% if acct %}
-    <div class="col-auto">
+    <div class="col-md-6 col-lg-4 col-xl-4">
       <div class="card my-4">
         <h5 class="card-header"><a class="card-link text-info" href="https://{{ sns }}.com" target="_blank">{{ sns }}</a></h5>
         <div class="card-body">
           <div class="card-title text-muted">{{ acct|truncatechars:20 }}</div>
           <div class="card-text">
             <ul class="list-group list-group-flush">
-            {% for d in data|get_sns:sns %}
-              <li class="list-group-item small"><pre>{{ d|truncatechars_html:120 }}</pre></li>
+            {% for d in data|get_sns:sns|dictsortreversed:'created' %}
+              {% if sns == 'reddit' %}
+              <li class="list-group-item small">
+                <div class="row-auto"><a class="font-weight-bold" href="{{ d.url }}" target="_blank">{{ d.title }}</a> on <a class="font-weight-bold" href="https://www.reddit.com/{{ d.subreddit }}" target="_blank">{{ d.subreddit }}</a></div>
+                <div class="row-auto mb-2 text-muted">{{ d.created|timesince }} ago</div>
+                <div class="row-auto"><pre>{{ d.text|truncatechars_html:120|safe }}</pre></div>
+              </li>
+              {% else %}
+              <li class="list-group-item small">
+                <div class="row-auto"><pre>{{ d.text|truncatechars_html:120|safe }}</pre></div>
+                <div class="row-auto mb-2 text-muted">{{ d.created|timesince }} ago</div>
+              </li>
+              {% endif %}
             {% empty %}
               <li class="list-group-item small">No data.</li>
             {% endfor %}
