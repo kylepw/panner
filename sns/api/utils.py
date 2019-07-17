@@ -1,4 +1,5 @@
 """Process data from API wrapper modules."""
+from .spotify import Spotify
 from .twitter import Twitter
 from .reddit import get_comments_submissions
 
@@ -19,7 +20,11 @@ def _get_meetup(id):
     return
 
 def _get_spotify(id):
-    return
+    """Return user's playlist information"""
+    spotify = Spotify()
+
+    # user_info = spotify.get_profile(profile.spotify)
+    return spotify.get_playlists(id)
 
 def _get_reddit(username):
     """Return latest Reddit activity"""

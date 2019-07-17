@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -24,6 +25,10 @@ class Activity(DetailView):
         context['data'] = {}
         for sns, acct in context['profile'].get_fields():
             context['data'][sns] = get_activity(sns, acct)
+            # All data needs a `created` field.
+            if not any([d.get('created') for d in context['data'][sns]]):
+                for d in context['data'][sns]:
+                    d['created'] = datetime.now()
         return context
 
 

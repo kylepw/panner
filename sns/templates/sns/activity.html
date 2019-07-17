@@ -32,6 +32,18 @@
                 <div class="row-auto mb-2 text-muted">{{ d.created|timesince }} ago</div>
                 <div class="row-auto"><pre>{{ d.text|truncatechars_html:120|safe }}</pre></div>
               </li>
+              {% elif sns == 'spotify' %}
+              <li>
+                <table style="border: 0; margin-top: 2em;">
+                  <caption>Playlists</caption>
+                  <tr>
+                  {% for playlist in d.items %}
+                    <td><a href="{{ playlist.external_urls.spotify }}" target="_blank"><img src="{{ playlist.images.0.url}} " height="100" title="{{ playlist.name }}" alt="{{ playlist.name }}"/></a></td>
+                  {% endfor %}
+                  </tr>
+                  <tr><td>Total: {{ data.total }}</td></tr>
+                </table>
+              </li>
               {% else %}
               <li class="list-group-item small">
                 <div class="row-auto"><pre>{{ d.text|truncatechars_html:120|safe }}</pre></div>
