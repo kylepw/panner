@@ -1,6 +1,6 @@
 """Process data from API wrapper modules."""
 from .twitter import Twitter
-
+from .reddit import get_comments_submissions
 
 def get_activity(sns, acct):
     """Return activity data."""
@@ -22,9 +22,10 @@ def _get_spotify(id):
     return
 
 def _get_reddit(username):
-    return
+    """Return latest Reddit activity"""
+    return get_comments_submissions(username)
 
 def _get_twitter(id):
-    """Return latest Twitter tweets"""
+    """Return latest tweets"""
     api = Twitter()
     return api.get_tweets(id=id, num=5)
