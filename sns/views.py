@@ -26,7 +26,7 @@ class Activity(DetailView):
         for sns, acct in context['profile'].get_fields():
             context['data'][sns] = get_activity(sns, acct)
             # All data needs a `created` field.
-            if not any([d.get('created') for d in context['data'][sns]]):
+            if context['data'][sns] and not any([d.get('created') for d in context['data'][sns] if isinstance(d, dict)]):
                 for d in context['data'][sns]:
                     d['created'] = datetime.now()
         return context

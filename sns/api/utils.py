@@ -24,7 +24,7 @@ def _get_spotify(id):
     spotify = Spotify()
 
     # user_info = spotify.get_profile(profile.spotify)
-    return spotify.get_playlists(id)
+    return spotify.get_playlists(id).get('items')
 
 def _get_reddit(username):
     """Return latest Reddit activity"""
