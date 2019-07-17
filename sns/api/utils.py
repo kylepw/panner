@@ -23,7 +23,6 @@ def _get_spotify(id):
     """Return user's playlist information"""
     spotify = Spotify()
 
-    # user_info = spotify.get_profile(profile.spotify)
     return spotify.get_playlists(id).get('items')
 
 def _get_reddit(username):

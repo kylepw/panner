@@ -26,7 +26,7 @@
           <div class="card-text">
             {% if sns == 'spotify' %}
             <div class="row">
-              {% for d in data|get_sns:sns|dictsortreversed:'created' %}
+              {% for d in data|get_sns:sns %}
               <div class="col-auto">
                 <a href="{{ d.external_urls.spotify }}" target="_blank"><img class="mb-3" src="{{ d.images.0.url}} " height="100" title="{{ d.name }}" alt="{{ d.name }}"/></a>
               </div>
