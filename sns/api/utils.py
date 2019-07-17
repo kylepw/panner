@@ -7,7 +7,7 @@
 """
 from .twitter import TwitterAPI
 
-def get_tweets(twitter_id):
-    """Return latest tweets"""
+def twitter_activity(twitter_id):
+    """Return latest Twitter tweets"""
     api = TwitterAPI()
-    return api.get_tweets(id=twitter_id)
+    return api.get_tweets(id=twitter_id, num=5)
