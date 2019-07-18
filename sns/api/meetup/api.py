@@ -76,7 +76,7 @@ class Meetup:
         for a in activity:
             if not a.get('created') and a.get('published'):
                 a['created'] = Meetup._us_to_utc(a.get('published'))
-                
+
         return activity
 
     def _url_for_endpoint(self, endpoint):
@@ -107,4 +107,6 @@ class Meetup:
             return
         local_tz = pytz.timezone(US_TIMEZONES[found_tz.group().strip()])
         date_str = re.sub(tz_re, ' ', date_str)
-        return pytz.utc.normalize(local_tz.localize(datetime.strptime(date_str, '%c')).astimezone(pytz.utc))
+        return pytz.utc.normalize(
+            local_tz.localize(datetime.strptime(date_str, '%c')).astimezone(pytz.utc)
+        )

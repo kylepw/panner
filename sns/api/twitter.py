@@ -9,6 +9,7 @@ formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
+
 class Twitter:
     _CONSUMER_KEY = os.getenv('TWITTER_CONSUMER_KEY')
     _CONSUMER_SECRET_KEY = os.getenv('TWITTER_CONSUMER_SECRET_KEY')

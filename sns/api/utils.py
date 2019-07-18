@@ -14,6 +14,7 @@ formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
+
 class GetActivity:
     """Return activity data and add OAuth info to session."""
 
@@ -36,17 +37,19 @@ class GetActivity:
     def spotify(request, id):
         """Return user's playlist information"""
         try:
-            if request.session.get('spotify_token') and not SpotifyOAuth().is_token_expired(
-                request.session['spotify_token']
-            ):
+            if request.session.get(
+                'spotify_token'
+            ) and not SpotifyOAuth().is_token_expired(request.session['spotify_token']):
                 # Reuse stored token
-                spotify = Spotify(auth=SpotifyOAuth(token=request.session['spotify_token']))
+                spotify = Spotify(
+                    auth=SpotifyOAuth(token=request.session['spotify_token'])
+                )
             else:
                 spotify = Spotify()
                 request.session['spotify_token'] = spotify.auth.token
 
             return request, spotify.get_playlists(id).get('items')
-            
+
         except Exception:
             logger.exception('Failed to fetch data from Spotify API.')
             return request, None

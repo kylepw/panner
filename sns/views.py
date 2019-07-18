@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -44,7 +43,9 @@ class Activity(DetailView):
         context['data'] = {}
         for sns, acct in context['profile'].get_fields():
             if sns and acct:
-                self.request, context['data'][sns] = getattr(GetActivity, sns)(self.request, acct)
+                self.request, context['data'][sns] = getattr(GetActivity, sns)(
+                    self.request, acct
+                )
 
         return context
 
@@ -67,7 +68,9 @@ def profile_edit(request, pk):
         form = ProfileForm(request.POST, instance=profile)
         if form.is_valid():
             post = form.save()
-            messages.add_message(request, messages.SUCCESS, "Changes to '%s' saved." % post.name)
+            messages.add_message(
+                request, messages.SUCCESS, "Changes to '%s' saved." % post.name
+            )
             return redirect('activity', pk=post.pk)
     else:
         form = ProfileForm(instance=profile)
@@ -92,7 +95,9 @@ def profile_search(request):
             messages.error(request, "'%s' doesn't exist. Try again." % query)
             return redirect(request.META.get('HTTP_REFERER', 'profile_search'))
     profile_exists = Profile.objects.all().exists()
-    return render(request, 'sns/profile_search.html', {'profile_exists': profile_exists})
+    return render(
+        request, 'sns/profile_search.html', {'profile_exists': profile_exists}
+    )
 
 
 def meetup_callback(request):

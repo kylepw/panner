@@ -7,7 +7,6 @@ logger = logging.getLogger('twitter')
 
 
 class TwitterTests(TestCase):
-
     def setUp(self):
         patch_consumer_key = patch.object(Twitter, '_CONSUMER_KEY')
         patch_secret_key = patch.object(Twitter, '_CONSUMER_SECRET_KEY')
@@ -28,8 +27,7 @@ class TwitterTests(TestCase):
         Twitter()
 
         self.mock_appauth.assert_called_once_with(
-            self.mock_consumer_key,
-            self.mock_secret_key,
+            self.mock_consumer_key, self.mock_secret_key
         )
         self.mock_api.assert_called_once()
 
@@ -51,13 +49,3 @@ class TwitterTests(TestCase):
 
         mock_cursor.assert_called_once()
         mock_exception.assert_called_once()
-
-
-
-
-
-
-
-
-
-
