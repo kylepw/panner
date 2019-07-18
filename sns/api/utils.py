@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 import logging
 
 from .meetup import Meetup, OAuth2Code as MeetupOAuth
-from .spotify import Spotify
+from .spotify import Spotify, OAuth2Client as SpotifyOAuth
 from .twitter import Twitter
 from .reddit import get_comments_submissions
 
@@ -35,9 +35,21 @@ class GetActivity:
     @staticmethod
     def spotify(request, id):
         """Return user's playlist information"""
-        spotify = Spotify()
+        try:
+            if request.session.get('spotify_token') and not SpotifyOAuth().is_token_expired(
+                request.session['spotify_token']
+            ):
+                # Reuse stored token
+                spotify = Spotify(auth=SpotifyOAuth(token=request.session['spotify_token']))
+            else:
+                spotify = Spotify()
+                request.session['spotify_token'] = spotify.auth.token
 
-        return request, spotify.get_playlists(id).get('items')
+            return request, spotify.get_playlists(id).get('items')
+            
+        except Exception:
+            logger.exception('Failed to fetch data from Spotify API.')
+            return request, None
 
     @staticmethod
     def reddit(request, username):

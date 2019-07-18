@@ -45,6 +45,7 @@ class Activity(DetailView):
         for sns, acct in context['profile'].get_fields():
             if sns and acct:
                 self.request, context['data'][sns] = getattr(GetActivity, sns)(self.request, acct)
+
         return context
 
 
