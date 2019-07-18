@@ -1,35 +1,51 @@
 """Process data from API wrapper modules."""
+
+from django.shortcuts import redirect
+import logging
+
+from .meetup import Meetup, OAuth2Code as MeetupOAuth
 from .spotify import Spotify
 from .twitter import Twitter
 from .reddit import get_comments_submissions
 
-def get_activity(sns, acct):
-    """Return activity data."""
-    DATA = {
-        'meetup': _get_meetup,
-        'reddit': _get_reddit,
-        'spotify': _get_spotify,
-        'twitter': _get_twitter,
-    }
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
-    if sns in DATA:
-        return DATA[sns](acct)
-    return
+class GetActivity:
+    """Return activity data and add OAuth info to session."""
 
-def _get_meetup(id):
-    return
+    @staticmethod
+    def meetup(request, id):
+        if request.session['meetup_token']:
+            # Try to reuse stored token
+            auth = MeetupOAuth(token=request.session['meetup_token'])
+            if auth.is_token_expired():
+                request.session['meetup_token'] = auth.refresh_token()
+            try:
+                meetup = Meetup(auth)
+                return request, meetup.user_activity(id)
+            except Exception:
+                logger.exception('Failed to fetch data from Meetup API.')
 
-def _get_spotify(id):
-    """Return user's playlist information"""
-    spotify = Spotify()
+        return request, None
 
-    return spotify.get_playlists(id).get('items')
+    @staticmethod
+    def spotify(request, id):
+        """Return user's playlist information"""
+        spotify = Spotify()
 
-def _get_reddit(username):
-    """Return latest Reddit activity"""
-    return get_comments_submissions(username)
+        return request, spotify.get_playlists(id).get('items')
 
-def _get_twitter(id):
-    """Return latest tweets"""
-    api = Twitter()
-    return api.get_tweets(id=id, num=5)
+    @staticmethod
+    def reddit(request, username):
+        """Return latest Reddit activity"""
+        return request, get_comments_submissions(username)
+
+    @staticmethod
+    def twitter(request, id):
+        """Return latest tweets"""
+        api = Twitter()
+        return request, api.get_tweets(id=id, num=5)

@@ -4,7 +4,8 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
 
-from .api.utils import get_activity
+from .api.meetup import OAuth2Code as MeetupOAuth
+from .api.utils import GetActivity
 from .forms import ProfileForm
 from .models import Profile
 
@@ -18,14 +19,33 @@ class ProfileList(ListView):
 class Activity(DetailView):
     model = Profile
     context_object_name = 'profile'
-    template_name = "sns/activity.html"
+    template_name = 'sns/activity.html'
+
+    def get_object(self, **kwargs):
+        obj = super().get_object(**kwargs)
+
+        print(self.request.session.get('meetup_token'))
+        # Meetup OAuth dance
+        if not self.request.session.get('meetup_token'):
+            auth = MeetupOAuth()
+            auth_resp_uri = self.request.session.get('meetup_auth_resp')
+            if not auth_resp_uri:
+                # Redirect to fetch authentication token
+                self.request.session['meetup_pk'] = obj.profile.pk
+                auth_url = auth.authorization_url()
+                return redirect(auth_url)
+
+            del self.request.session['meetup_auth_resp']
+            self.request.session['meetup_token'] = auth.get_access(auth_resp_uri)
+
+        return obj
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['data'] = {}
         for sns, acct in context['profile'].get_fields():
             if sns and acct:
-                context['data'][sns] = get_activity(sns, acct)
+                self.request, context['data'][sns] = getattr(GetActivity, sns)(self.request, acct)
         return context
 
 
@@ -73,3 +93,13 @@ def profile_search(request):
             return redirect(request.META.get('HTTP_REFERER', 'profile_search'))
     profile_exists = Profile.objects.all().exists()
     return render(request, 'sns/profile_search.html', {'profile_exists': profile_exists})
+
+
+def meetup_callback(request):
+    if request.method == 'GET':
+        request.session['meetup_auth_resp'] = request.build_absolute_uri()
+        pk = request.session['meetup_pk']
+        if pk:
+            del request.session['meetup_pk']
+
+        return redirect('activity', pk=pk)

@@ -41,6 +41,24 @@
                 <div class="row-auto mb-2 text-muted">{{ d.created|timesince }} ago</div>
                 <div class="row-auto"><pre>{{ d.text|truncatechars_html:120|safe }}</pre></div>
               </li>
+              {% elif sns == 'meetup' %}
+              <li class="list-group-item small">
+                {% if d.photo_url %}
+                <div class="row">
+                  <div class="col">
+                    <h3><img src="{{ d.photo_url }}"/>
+                  </div>
+                </div>
+                {% endif %}
+                <div class="row mb-1">
+                  <div class="col">
+                    <a href="{{ d.link }}" target="_blank">{{ d.title }}{% if d.rsvp_response %} ({{ d.rsvp_response }}){% endif %}</a>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col text-muted">{{ d.created|timesince }} ago</div>
+                </div>
+              </li>
               {% else %}
               <li class="list-group-item small">
                 <div class="row-auto"><pre>{{ d.text|truncatechars_html:120|safe }}</pre></div>

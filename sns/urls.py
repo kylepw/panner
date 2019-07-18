@@ -9,4 +9,5 @@ urlpatterns = [
     path('profile/<int:pk>/edit/', views.profile_edit, name='profile_edit'),
     path('profile/<int:pk>/del/', views.profile_delete, name='profile_delete'),
     path('profile/new/', views.profile_new, name='profile_new'),
+    path('meetup/callback/', views.meetup_callback, name='meetup_callback'),
 ]
