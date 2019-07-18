@@ -29,7 +29,7 @@ class Activity(DetailView):
             auth_resp_uri = self.request.session.get('meetup_auth_resp')
             if not auth_resp_uri:
                 # Redirect to fetch authentication token
-                self.request.session['meetup_pk'] = obj.profile.pk
+                self.request.session['meetup_pk'] = obj.pk
                 auth_url = auth.authorization_url()
                 return redirect(auth_url)
 
@@ -40,12 +40,15 @@ class Activity(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['data'] = {}
-        for sns, acct in context['profile'].get_fields():
-            if sns and acct:
-                self.request, context['data'][sns] = getattr(GetActivity, sns)(
-                    self.request, acct
-                )
+
+        # Don't fetch data on HttpResponseRedirect, etc. obj without profile context
+        if hasattr(context['profile'], 'get_fields'):
+            context['data'] = {}
+            for sns, acct in context['profile'].get_fields():
+                if sns and acct:
+                    self.request, context['data'][sns] = getattr(GetActivity, sns)(
+                        self.request, acct
+                    )
 
         return context
 

@@ -121,8 +121,17 @@ class ActivityView(TestCase):
     def setUp(self):
 
         self.profile = Profile.objects.create(
-            name='Harry', reddit='fb@fb.com', twitter='hry318'
+            name='Harry', reddit='Gallowboob', twitter='katyperry'
         )
+        # Prevent Meetup OAuth redirect.
+        session = self.client.session
+        session['meetup_token'] = {
+            'access_token': 'ACCESS_TOKEN_TO_STORE',
+            'token_type': 'bearer',
+            'expires_in': 3600,
+            'refresh_token': 'TOKEN_USED_TO_REFRESH_AUTHORIZATION',
+        }
+        session.save()
 
     def test_view_url_exists_at_desired_location(self):
         pk = self.profile.pk
@@ -170,7 +179,7 @@ class ProfileNewTests(TestCase):
         self.assertTemplateUsed(response, 'sns/profile_edit.html')
 
     def test_post_form_with_name_and_sns_handle(self):
-        data = {'name': 'Harry', 'twitter': 'hry318'}
+        data = {'name': 'Harry', 'twitter': 'katyperry'}
         response = self.post_profile(data)
 
         self.assertEqual(response.status_code, 302)
@@ -186,7 +195,7 @@ class ProfileNewTests(TestCase):
         self.assertRedirects(response, reverse('activity', kwargs={'pk': pk}))
 
     def test_post_form_with_only_twitter_handle(self):
-        response = self.post_profile({'twitter': 'hry318'})
+        response = self.post_profile({'twitter': 'katyperry'})
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'sns/profile_edit.html')
         self.assertContains(response, 'This field is required.')
@@ -202,7 +211,7 @@ class ProfileEditTests(TestCase):
     def setUp(self):
 
         self.profile = Profile.objects.create(
-            name='Harry', reddit='fb@fb.com', twitter='hry318'
+            name='Harry', reddit='Gallowboob', twitter='katyperry'
         )
 
     def get_profile(self, pk=None):
@@ -213,7 +222,7 @@ class ProfileEditTests(TestCase):
     def post_profile(self, pk, data=None):
         if data is None:
             return self.client.post(reverse('profile_edit', kwargs={'pk': pk}))
-        return self.client.post(reverse('profile_edit', kwargs={'pk': pk}), data=data)
+        return self.client.post(reverse('profile_edit', kwargs={'pk': pk}))
 
     def test_view_url_exists_at_desired_location(self):
         pk = self.profile.pk
@@ -258,7 +267,7 @@ class ProfileDeleteTests(TestCase):
     def setUp(self):
 
         self.profile = Profile.objects.create(
-            name='Harry', reddit='fb@fb.com', twitter='hry318'
+            name='Harry', reddit='Gallowboob', twitter='katyperry'
         )
 
     def del_profile(self, pk=None):
