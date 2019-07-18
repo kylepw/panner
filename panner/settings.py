@@ -32,10 +32,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'sns.apps.SnsConfig',
-    'meetup.apps.MeetupConfig',
-    'reddit.apps.RedditConfig',
-    'spotify.apps.SpotifyConfig',
-    'twitter.apps.TwitterConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
