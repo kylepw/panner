@@ -13,6 +13,7 @@ requests = "*"
 psycopg2 = "*"
 requests-oauthlib = "*"
 praw = "*"
+pytz = "*"
 
 [requires]
 python_version = "3.7"
