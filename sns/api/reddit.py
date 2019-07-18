@@ -1,5 +1,6 @@
 from datetime import datetime
 from praw import Reddit
+import pytz
 import os
 
 
@@ -16,7 +17,7 @@ def get_comments_submissions(username):
             text=comment.body_html,
             subreddit=comment.subreddit_name_prefixed,
             url=comment.link_url,
-            created=datetime.utcfromtimestamp(comment.created),
+            created=datetime.fromtimestamp(comment.created_utc, pytz.utc),
         )
         for comment in reddit.redditor(username).comments.new(limit=5)
     ]
@@ -26,7 +27,7 @@ def get_comments_submissions(username):
             text=submission.selftext_html,
             subreddit=submission.subreddit_name_prefixed,
             url=submission.url,
-            created=datetime.utcfromtimestamp(submission.created),
+            created=datetime.fromtimestamp(submission.created_utc, pytz.utc),
         )
         for submission in reddit.redditor(username).submissions.new(limit=5)
     ]

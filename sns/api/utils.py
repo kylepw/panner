@@ -16,7 +16,7 @@ logger.addHandler(handler)
 
 
 class GetActivity:
-    """Return activity data and add OAuth info to session."""
+    """Return activity data and process OAuth tokens in session."""
 
     @staticmethod
     def meetup(request, id):
