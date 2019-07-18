@@ -24,7 +24,6 @@ class Activity(DetailView):
     def get_object(self, **kwargs):
         obj = super().get_object(**kwargs)
 
-        print(self.request.session.get('meetup_token'))
         # Meetup OAuth dance
         if not self.request.session.get('meetup_token'):
             auth = MeetupOAuth()
