@@ -9,7 +9,7 @@ services:
     build: .
     restart: on-failure
     env_file:
-      - ./.env_docker
+      - ./.env
     command: bash -c "
       python manage.py migrate
       && python manage.py runserver 0.0.0.0:8000

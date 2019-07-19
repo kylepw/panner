@@ -1,25 +1,8 @@
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#  env template for running from source
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~
+#  env template
+# ~~~~~~~~~~~~~~
 #
-#--- Copy to hidden file --------------#
-#
-# $ cp env_template .env
-#
-#--- Fill in values -------------------#
-#
-# $ vim .env
-#
-#--- Load it --------------------------#
-#
-# $ pipenv shell
-# -OR-
-# $ set -a; source .env; set +a
-#
-#--------------------------------------#
-#
-# WARNING: Never push this file to your public repo!!!
-#
+# WARNING: Never push this to your public repo!!!
 
 # Twitter API
 TWITTER_CONSUMER_KEY=???
@@ -37,20 +20,20 @@ SPOTIFY_CLIENT_SECRET=???
 # Reddit API
 REDDIT_CLIENT_ID=???
 REDDIT_CLIENT_SECRET=???
-# Replace `MYAPPNAME` and `MYUSERNAME`
-REDDIT_USER_AGENT="web:MYAPPNAME:v1.0 (by /u/MYUSERNAME)"
+REDDIT_USER_AGENT="web:MYAPPNAME:v1.0 (by /u/MYUSERNAME)" # <-- Replace `MYAPPNAME` & `MYUSERNAME`
 
-# Postgresql
-DB_NAME=???
-DB_USER=???
-DB_PASS=???
-DB_HOST=127.0.0.1
+# PostgreSQL
+DB_ENGINE=django.db.backends.postgresql
+DB_NAME=postgres
+DB_USER=postgres
+DB_PASS=mypasswd
+DB_HOST=db # <-- Change to '127.0.0.1' if running from source
 DB_PORT=5432
 
-# OAuth debug mode (necessary to allow non-https redirect URIs)
+# Necessary to allow non-https redirect URIs
 OAUTHLIB_INSECURE_TRANSPORT=1
 
-# Generate a key from root of Django project with this:
+# Generate a different key from root of Django project with:
 # $ python manage.py shell -c 'from django.core.management import utils; print(utils.get_random_secret_key())'
-SECRET_KEY=???
+SECRET_KEY=poo
 
