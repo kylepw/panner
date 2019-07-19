@@ -1,7 +1,7 @@
 from django.db.utils import DataError, IntegrityError
 from django.test import TestCase
 
-from ..models import Profile
+from sns.models import Profile
 
 
 class ProfileModelTests(TestCase):

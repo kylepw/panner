@@ -2,8 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
-from ..forms import ProfileForm
-from ..models import Profile
+from sns.forms import ProfileForm
+from sns.models import Profile
 
 
 class ProfileListViewWithDataTests(TestCase):
@@ -125,12 +125,7 @@ class ActivityView(TestCase):
         )
         # Prevent Meetup OAuth redirect.
         session = self.client.session
-        session['meetup_token'] = {
-            'access_token': 'ACCESS_TOKEN_TO_STORE',
-            'token_type': 'bearer',
-            'expires_in': 3600,
-            'refresh_token': 'TOKEN_USED_TO_REFRESH_AUTHORIZATION',
-        }
+        session['meetup_token'] = 'TOKEN'
         session.save()
 
     def test_view_url_exists_at_desired_location(self):
@@ -163,6 +158,12 @@ class ActivityView(TestCase):
 
 
 class ProfileNewTests(TestCase):
+    def setUp(self):
+        # Prevent Meetup OAuth redirect.
+        session = self.client.session
+        session['meetup_token'] = 'TOKEN'
+        session.save()
+
     def post_profile(self, data=None):
         if data is None:
             return self.client.post(reverse('profile_new'))
@@ -213,6 +214,10 @@ class ProfileEditTests(TestCase):
         self.profile = Profile.objects.create(
             name='Harry', reddit='Gallowboob', twitter='katyperry'
         )
+        # Prevent Meetup OAuth redirect.
+        session = self.client.session
+        session['meetup_token'] = 'TOKEN'
+        session.save()
 
     def get_profile(self, pk=None):
         if pk is None:
@@ -222,7 +227,7 @@ class ProfileEditTests(TestCase):
     def post_profile(self, pk, data=None):
         if data is None:
             return self.client.post(reverse('profile_edit', kwargs={'pk': pk}))
-        return self.client.post(reverse('profile_edit', kwargs={'pk': pk}))
+        return self.client.post(reverse('profile_edit', kwargs={'pk': pk}), data)
 
     def test_view_url_exists_at_desired_location(self):
         pk = self.profile.pk

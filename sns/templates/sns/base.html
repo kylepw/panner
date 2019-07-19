@@ -21,7 +21,6 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="navbar-nav">
           <a class="btn btn-info btn-sm nav-item nav-link" role="button" title="Add someone new" href="{% url 'profile_new' %}">+</button>
-          <!-- <a class="nav-item nav-link" href="{% url 'profile_new' %}">+</a> -->
           <a class="nav-item nav-link" title="See everyone" href="{% url 'profile-list' %}">People</a>
         </div>
       </div>
@@ -43,7 +42,7 @@
     {% endif %}
 
     {% block body %}{% endblock %}
-    
+
     <script src="{% static 'sns/jquery/jquery-3.4.1.slim.min.js' %}"></script>
     <script src="{% static 'sns/popper.js/dist/umd/popper.min.js' %}"></script>
     <script src="{% static 'sns/bootstrap-4.3.1/js/bootstrap.min.js' %}"></script>

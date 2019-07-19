@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from ..forms import ProfileForm
-from ..models import Profile
+from sns.forms import ProfileForm
+from sns.models import Profile
 
 
 class ProfileFormTests(TestCase):
