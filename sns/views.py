@@ -30,7 +30,6 @@ class Activity(DetailView):
 
         return self.render_to_response(context)
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -93,6 +92,7 @@ def profile_search(request):
         request, 'sns/profile_search.html', {'profile_exists': profile_exists}
     )
 
+
 def meetup_dance(request, pk):
     """Request oauth authentication code"""
     if request.method == 'GET':
@@ -101,6 +101,7 @@ def meetup_dance(request, pk):
         auth = MeetupOAuth()
         request.session['meetup_pk'] = pk
         return redirect(auth.authorization_url())
+
 
 def meetup_callback(request):
     """Exchange oauth authentication code for access token"""

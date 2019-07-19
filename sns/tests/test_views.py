@@ -130,9 +130,7 @@ class ActivityView(TestCase):
 
     def test_view_url_exists_at_desired_location(self):
         pk = self.profile.pk
-        self.assertEqual(
-            reverse('activity', kwargs={'pk': pk}), f'/profile/{pk}/'
-        )
+        self.assertEqual(reverse('activity', kwargs={'pk': pk}), f'/profile/{pk}/')
 
     def test_does_not_render_page_without_pk_value_passed(self):
         with self.assertRaises(NoReverseMatch):
@@ -307,5 +305,3 @@ class ProfileDeleteTests(TestCase):
         response = self.del_profile(pk)
         self.assertTrue(response.status_code, 200)
         self.assertFalse(Profile.objects.filter(pk=pk).exists())
-
-
