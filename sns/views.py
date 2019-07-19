@@ -24,23 +24,9 @@ class Activity(DetailView):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
 
-        # Meetup OAuth dance if has account but no access token
+        # If Meetup account but no token, acquire one
         if self.object.meetup and not self.request.session.get('meetup_token'):
-            auth = MeetupOAuth()
-            auth_resp_uri = self.request.session.get('meetup_auth_resp')
-
-            if not auth_resp_uri:
-                # Fetch authentication token
-                self.request.session['meetup_pk'] = self.object.pk
-                return redirect(auth.authorization_url())
-
-            del self.request.session['meetup_auth_resp']
-            self.request.session['meetup_token'] = auth.get_access(auth_resp_uri)
-            context['data']['meetup'] = getattr(GetActivity, 'meetup')(self.request, self.object.meetup)
-
-        print('in get')
-        print(f"meetup_token: {self.request.session.get('meetup_token')}")
-        print(context['data'].get('meetup'))
+            return redirect('meetup_dance', pk=self.object.pk)
 
         return self.render_to_response(context)
 
@@ -48,19 +34,12 @@ class Activity(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Don't fetch data on HttpResponseRedirect, etc. obj without profile context
-        if hasattr(context['profile'], 'get_fields'):
-            context['data'] = {}
-            for sns, acct in context['profile'].get_fields():
-                if sns and acct:
-                    self.request, context['data'][sns] = getattr(GetActivity, sns)(
-                        self.request, acct
-                    )
-
-        print('in get_context_data')
-        print(f"meetup_token: {self.request.session.get('meetup_token')}")
-        print(context['data'].get('meetup'))
-
+        context['data'] = {}
+        for sns, acct in context['profile'].get_fields():
+            if sns and acct:
+                self.request, context['data'][sns] = getattr(GetActivity, sns)(
+                    self.request, acct
+                )
         return context
 
 
@@ -114,12 +93,22 @@ def profile_search(request):
         request, 'sns/profile_search.html', {'profile_exists': profile_exists}
     )
 
-def meetup_callback(request):
+def meetup_dance(request, pk):
+    """Request oauth authentication code"""
     if request.method == 'GET':
-        request.session['meetup_auth_resp'] = request.build_absolute_uri()
+        if not pk:
+            raise Http404
+        auth = MeetupOAuth()
+        request.session['meetup_pk'] = pk
+        return redirect(auth.authorization_url())
 
+def meetup_callback(request):
+    """Exchange oauth authentication code for access token"""
+    if request.method == 'GET':
         pk = request.session.get('meetup_pk')
-        if pk is None:
+        if not pk:
             raise Http404
         del request.session['meetup_pk']
+        auth = MeetupOAuth()
+        request.session['meetup_token'] = auth.get_access(request.build_absolute_uri())
         return redirect('activity', pk=pk)
