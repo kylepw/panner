@@ -54,7 +54,7 @@ Run
     $ cp env_template .env && vim .env #Insert your values.
     $ pipenv shell
     $ # Make sure you have PostgreSQL setup and running at this point.
-    $ python manage.py makemigrations && python manage.py migrate
+    $ python manage.py migrate
     $ python manage.py runserver
     ...
     Django version 2.2.3, using settings 'panner.settings'
