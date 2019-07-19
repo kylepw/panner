@@ -1,23 +1,25 @@
-# .env template
-# ~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#  env template for running from source
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-##### Copy to hidden file #####
+#--- Copy to hidden file --------------#
 #
 # $ cp env_template .env
 #
-##### Fill in values ##########
+#--- Fill in values -------------------#
 #
 # $ vim .env
 #
-##### Load it #################
+#--- Load it --------------------------#
 #
 # $ pipenv shell
-#
 # -OR-
-#
 # $ set -a; source .env; set +a
 #
-# Warning: NEVER push this file to your public repository!!!
+#--------------------------------------#
+#
+# WARNING: Never push this file to your public repo!!!
+#
 
 # Twitter API
 TWITTER_CONSUMER_KEY=???
@@ -42,7 +44,7 @@ REDDIT_USER_AGENT="web:MYAPPNAME:v1.0 (by /u/MYUSERNAME)"
 DB_NAME=???
 DB_USER=???
 DB_PASS=???
-DB_HOST=localhost
+DB_HOST=127.0.0.1
 DB_PORT=5432
 
 # OAuth debug mode (necessary to allow non-https redirect URIs)

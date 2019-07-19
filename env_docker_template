@@ -1,0 +1,51 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#  `docker-compose` env template
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#--- Copy & fill in values -------------------------#
+#
+# $ cp env_docker_template .env_docker
+# $ vim .env_docker
+#
+#--- Start up containers & enjoy -------------------#
+#
+# $ docker-compose up && open http://127.0.0.1:8000
+#
+#---------------------------------------------------#
+#
+# WARNING: Never push this to your public repo!!!
+#
+
+# Twitter API
+TWITTER_CONSUMER_KEY=???
+TWITTER_CONSUMER_SECRET_KEY=???
+
+# Meetup API
+MEETUP_CONSUMER_KEY=???
+MEETUP_CONSUMER_SECRET_KEY=???
+MEETUP_REDIRECT_URI=http://127.0.0.1:8000/meetup/callback/
+
+# Spotify API
+SPOTIFY_CLIENT_ID=???
+SPOTIFY_CLIENT_SECRET=???
+
+# Reddit API
+REDDIT_CLIENT_ID=???
+REDDIT_CLIENT_SECRET=???
+# Replace `MYAPPNAME` and `MYUSERNAME`
+REDDIT_USER_AGENT="web:MYAPPNAME:v1.0 (by /u/MYUSERNAME)"
+
+# PostgreSQL
+DB_ENGINE=django.db.backends.postgresql
+DB_NAME=postgres
+DB_USER=postgres
+DB_PASS=mypasswd
+DB_HOST=db
+DB_PORT=5432
+
+# OAuth debug mode (necessary to allow non-https redirect URIs)
+OAUTHLIB_INSECURE_TRANSPORT=1
+
+# Django
+SECRET_KEY=poo
+
