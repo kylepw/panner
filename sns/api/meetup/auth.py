@@ -69,7 +69,7 @@ class OAuth2Code(OAuthHandler):
         scope=None,
     ):
         super().__init__(client_id, client_secret, token)
-        self.redirect_uri = redirect_uri or os.getenv('SPOTIFY_REDIRECT_URI')
+        self.redirect_uri = redirect_uri or os.getenv('MEETUP_REDIRECT_URI')
         self.scope = scope or []
 
         if token:
