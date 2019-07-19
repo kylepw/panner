@@ -1,12 +1,12 @@
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
 
-from .api.meetup import OAuth2Code as MeetupOAuth
-from .api.utils import GetActivity
-from .forms import ProfileForm
-from .models import Profile
+from sns.api.meetup import OAuth2Code as MeetupOAuth
+from sns.api.utils import GetActivity
+from sns.forms import ProfileForm
+from sns.models import Profile
 
 
 class ProfileList(ListView):
@@ -20,23 +20,30 @@ class Activity(DetailView):
     context_object_name = 'profile'
     template_name = 'sns/activity.html'
 
-    def get_object(self, **kwargs):
-        obj = super().get_object(**kwargs)
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
 
-        # Meetup OAuth dance
-        if not self.request.session.get('meetup_token'):
+        # Meetup OAuth dance if has account but no access token
+        if self.object.meetup and not self.request.session.get('meetup_token'):
             auth = MeetupOAuth()
             auth_resp_uri = self.request.session.get('meetup_auth_resp')
+
             if not auth_resp_uri:
-                # Redirect to fetch authentication token
-                self.request.session['meetup_pk'] = obj.pk
-                auth_url = auth.authorization_url()
-                return redirect(auth_url)
+                # Fetch authentication token
+                self.request.session['meetup_pk'] = self.object.pk
+                return redirect(auth.authorization_url())
 
             del self.request.session['meetup_auth_resp']
             self.request.session['meetup_token'] = auth.get_access(auth_resp_uri)
+            context['data']['meetup'] = getattr(GetActivity, 'meetup')(self.request, self.object.meetup)
 
-        return obj
+        print('in get')
+        print(f"meetup_token: {self.request.session.get('meetup_token')}")
+        print(context['data'].get('meetup'))
+
+        return self.render_to_response(context)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -50,12 +57,17 @@ class Activity(DetailView):
                         self.request, acct
                     )
 
+        print('in get_context_data')
+        print(f"meetup_token: {self.request.session.get('meetup_token')}")
+        print(context['data'].get('meetup'))
+
         return context
 
 
 def profile_new(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST)
+
         if form.is_valid():
             post = form.save()
             messages.add_message(request, messages.SUCCESS, "Added '%s'." % post.name)
@@ -102,12 +114,12 @@ def profile_search(request):
         request, 'sns/profile_search.html', {'profile_exists': profile_exists}
     )
 
-
 def meetup_callback(request):
     if request.method == 'GET':
         request.session['meetup_auth_resp'] = request.build_absolute_uri()
-        pk = request.session['meetup_pk']
-        if pk:
-            del request.session['meetup_pk']
 
+        pk = request.session.get('meetup_pk')
+        if pk is None:
+            raise Http404
+        del request.session['meetup_pk']
         return redirect('activity', pk=pk)

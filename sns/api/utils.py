@@ -20,7 +20,7 @@ class GetActivity:
 
     @staticmethod
     def meetup(request, id):
-        if request.session['meetup_token']:
+        if request.session.get('meetup_token'):
             # Try to reuse stored token
             auth = MeetupOAuth(token=request.session['meetup_token'])
             if auth.is_token_expired():
