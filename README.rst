@@ -56,14 +56,14 @@ Run (from source)
 
     $ git clone https://github.com/kylepw/panner.git && cd panner
     $ pip install pipenv && pipenv install
-    $ cp env_template .env && vim .env
-    $ # Make sure you have PostgreSQL setup and running at this point.
-    $ python manage.py migrate
-    $ python manage.py runserver
+    (panner)$ cp env_template .env && vim .env
+    (panner)$ # Make sure you have PostgreSQL setup and running at this point.
+    (panner)$ python manage.py migrate
+    (panner)$ python manage.py runserver
     ...
     Starting development server at http://127.0.0.1:8000/
     Quit the server with CONTROL-C.
-    $ open http://127.0.0.1:8000
+    (panner)$ open http://127.0.0.1:8000
 
 Todo
 ----
