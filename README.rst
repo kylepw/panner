@@ -57,7 +57,6 @@ Run (from source)
     $ git clone https://github.com/kylepw/panner.git && cd panner
     $ pip install pipenv && pipenv install
     $ cp env_template .env && vim .env
-    $ pipenv shell
     $ # Make sure you have PostgreSQL setup and running at this point.
     $ python manage.py migrate
     $ python manage.py runserver
