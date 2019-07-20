@@ -1,7 +1,7 @@
 ======
 Panner
 ======
-Django-powered web app to keep track of friends' social network activity.
+Django-powered web app to keep track of friends.
 
 Try it now_ with Docker_.
 
