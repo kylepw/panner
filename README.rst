@@ -5,7 +5,7 @@ Django-powered web app to keep track of friends' social network activity.
 
 Try it now_ with Docker_.
 
-.. image:: screenshots/activity.png
+.. image:: screenshots/Panner.gif
 
 *Note:* this app is intended for **development**, not production, usage.
 
