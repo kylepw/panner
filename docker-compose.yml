@@ -10,11 +10,28 @@ services:
     restart: on-failure
     env_file:
       - ./.env
+    # Prevent gunicorn worker blocking
+    tmpfs: /tmp
     command: bash -c "
-      python manage.py migrate
-      && python manage.py runserver 0.0.0.0:8000
-      "
-    ports:
-      - "8000:8000"
+      python manage.py collectstatic --noinput
+      && python manage.py migrate
+      && gunicorn panner.wsgi:application -b :8000"
+    volumes:
+      - static:/code/static
+    expose:
+      - "8000"
     depends_on:
       - db
+  proxy:
+    image: nginx
+    restart: on-failure
+    ports:
+      - "8080:80"
+    volumes:
+      - static:/code/static
+      - ./config/nginx:/etc/nginx/conf.d
+    depends_on:
+      - web
+
+volumes:
+  static:
