@@ -8,7 +8,7 @@ services:
     build: .
     restart: always
     env_file:
-      - ./.env
+      - .env
     # Prevent gunicorn workers from blocking
     tmpfs: /tmp
     command: bash -c "
