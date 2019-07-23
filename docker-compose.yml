@@ -26,7 +26,7 @@ services:
     image: nginx
     restart: always
     ports:
-      - "8080:80"
+      - "8000:80"
     volumes:
       - static:/code/static
       - ./config/nginx:/etc/nginx/conf.d
