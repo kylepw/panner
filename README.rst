@@ -25,7 +25,7 @@ Client ID/Secret Values
 -----------------------
 .. _values:
 
-- Acquire client ID/secret values from services that you will use (one or more): Meetup_, Reddit_, Spotify_, and/or Twitter_. Use ``http://127.0.0.1:8000`` as the callback URI.
+- Before running this app, you must acquire client ID/secret values from services that you will use (one or more): Meetup_, Reddit_, Spotify_, and/or Twitter_. Use ``http://127.0.0.1:8000`` as the callback URI.
 
 Run (with Docker)
 -----------------
@@ -33,7 +33,7 @@ Run (with Docker)
 
 - Get Docker_.
 
-- Clone, insert values_, and run::
+- Run in Dockerized **Django+Gunicorn+Postgres+Nginx** configuration: ::
 
     $ git clone https://github.com/kylepw/panner.git && cd panner
     $ # Acquire client ID/secret values (see above).
