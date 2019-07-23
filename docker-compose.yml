@@ -3,20 +3,20 @@ version: "3"
 services:
   db:
     image: postgres
-    environment:
-      - POSTGRES_PASSWORD=mypasswd
+    restart: always
   web:
     build: .
-    restart: on-failure
+    restart: always
     env_file:
       - ./.env
-    # Prevent gunicorn worker blocking
+    # Prevent gunicorn workers from blocking
     tmpfs: /tmp
     command: bash -c "
       python manage.py collectstatic --noinput
       && python manage.py migrate
       && gunicorn panner.wsgi:application -b :8000"
     volumes:
+      - .:/code
       - static:/code/static
     expose:
       - "8000"
@@ -24,7 +24,7 @@ services:
       - db
   proxy:
     image: nginx
-    restart: on-failure
+    restart: always
     ports:
       - "8080:80"
     volumes:
