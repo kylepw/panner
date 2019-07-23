@@ -26,8 +26,7 @@ REDDIT_USER_AGENT="web:MYAPPNAME:v1.0 (by /u/MYUSERNAME)" # <-- Replace `MYAPPNA
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=postgres
 DB_USER=postgres
-DB_PASS=mypasswd
-DB_HOST=db # <-- Change to '127.0.0.1' if running from source
+DB_HOST=db
 DB_PORT=5432
 
 # Necessary to allow non-https redirect URIs
