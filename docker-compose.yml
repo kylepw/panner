@@ -14,7 +14,7 @@ services:
     command: bash -c "
       python manage.py collectstatic --noinput
       && python manage.py migrate
-      && gunicorn panner.wsgi:application -b :8000"
+      && gunicorn -w 3 panner.wsgi:application -b :8000"
     volumes:
       - .:/code
       - static:/code/static
