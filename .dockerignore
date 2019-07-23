@@ -1,0 +1,7 @@
+.*
+docker-compose.yml
+Dockerfile
+*.md
+!README.md
+test*
+screenshots
