@@ -1,7 +1,9 @@
-.*
 docker-compose.yml
+.dockerignore
 Dockerfile
-*.md
-!README.md
-test*
+.env
+env_template
+**/.git*
+Procfile
+**/test*
 screenshots
