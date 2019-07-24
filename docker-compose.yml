@@ -7,6 +7,9 @@ services:
   web:
     build: .
     restart: always
+    environment:
+      # Separate from heroku settings
+      - DOCKER=1
     env_file:
       - .env
     # Prevent gunicorn workers from blocking
@@ -17,7 +20,7 @@ services:
       && gunicorn -w 3 panner.wsgi:application -b :8000"
     volumes:
       - .:/code
-      - static:/code/static
+      - static:/code/staticfiles
     expose:
       - "8000"
     depends_on:
@@ -28,7 +31,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - static:/code/static
+      - static:/code/staticfiles
       - ./config/nginx:/etc/nginx/conf.d
     depends_on:
       - web

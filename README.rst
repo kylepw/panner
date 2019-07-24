@@ -3,9 +3,7 @@ Panner
 ======
 Django-powered web app to keep track of friends.
 
-See it in the wild: https://panner.herokuapp.com
-
-Or try_ it with Docker_.
+Try it: https://panner.herokuapp.com
 
 .. image:: screenshots/Panner.gif
 
@@ -32,8 +30,6 @@ Client ID/Secret Values
 
 Run (in Docker)
 -----------------
-.. _try:
-
 - Get Docker_.
 
 - Clone, set values_, and run in **Django+Postgres+Gunicorn+Nginx** configuration: ::
@@ -46,7 +42,7 @@ Run (in Docker)
 
 Run (in Django development web server)
 ----------------------------------------
-- Start a Postgres database (here I use Docker_ but another method is fine): ::
+- Start a Postgres database: ::
 
     $ docker run --name db -p 5432:5432 -d postgres
 
