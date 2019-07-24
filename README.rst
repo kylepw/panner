@@ -7,8 +7,6 @@ Try it: https://panner.herokuapp.com
 
 .. image:: screenshots/Panner.gif
 
-*Note:* this app is intended for **development**, not production, usage.
-
 Features
 --------
 - Supports: Meetup, Reddit, Spotify, and Twitter accounts.
@@ -40,7 +38,7 @@ Run (in Docker)
     $ docker-compose up --build
     $ open http://127.0.0.1:8000
 
-Run (in Django development web server)
+Run (on Django development web server)
 ----------------------------------------
 - Start a Postgres database: ::
 
