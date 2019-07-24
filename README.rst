@@ -3,7 +3,9 @@ Panner
 ======
 Django-powered web app to keep track of friends.
 
-Try it now_ with Docker_.
+See it in the wild: https://panner.herokuapp.com
+
+Or try_ it with Docker_.
 
 .. image:: screenshots/Panner.gif
 
@@ -30,7 +32,7 @@ Client ID/Secret Values
 
 Run (in Docker)
 -----------------
-.. _now:
+.. _try:
 
 - Get Docker_.
 
