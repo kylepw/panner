@@ -7,9 +7,6 @@ services:
   web:
     build: .
     restart: always
-    environment:
-      # Skip heroku settings
-      - DOCKER=1
     env_file:
       - .env
     # Prevent gunicorn workers from blocking
@@ -17,7 +14,7 @@ services:
     command: bash -c "
       python manage.py collectstatic --noinput
       && python manage.py migrate
-      && gunicorn -w 3 panner.wsgi:application -b :8000"
+      && gunicorn panner.wsgi -b :8000"
     volumes:
       - .:/code
       - static:/code/staticfiles
