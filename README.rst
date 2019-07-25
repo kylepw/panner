@@ -49,8 +49,8 @@ Run (on Django development web server)
     $ git clone https://github.com/kylepw/panner.git && cd panner
     $ pip install pipenv && pipenv install
     (panner)$ cp env_template .env && vim .env
-    (panner)$ # Make sure you have PostgreSQL setup and running at this point.
-    (panner)$ python manage.py migrate && python manage.py runserver
+    (panner)$ # Make sure you have a Postgres server running at this point.
+    (panner)$ DB_HOST=127.0.0.1 ./manage.py migrate && ./manage.py runserver
     ...
     Starting development server at http://127.0.0.1:8000/
     Quit the server with CONTROL-C.
