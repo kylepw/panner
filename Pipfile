@@ -17,6 +17,7 @@ pytz = "*"
 gunicorn = "*"
 whitenoise = "*"
 django-heroku = "*"
+django-redis = "*"
 
 [requires]
 python_version = "3.7"

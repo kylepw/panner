@@ -4,6 +4,9 @@ services:
   db:
     image: postgres
     restart: always
+  redis:
+    image: redis
+    restart: always
   web:
     build: .
     restart: always
@@ -23,6 +26,7 @@ services:
       - "8000"
     depends_on:
       - db
+      - redis
   proxy:
     image: nginx
     restart: always
