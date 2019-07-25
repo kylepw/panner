@@ -125,7 +125,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 
-if not os.environ.get('DOCKER'):
+if os.environ.get('HEROKU'):
     # Heroku settings
     import django_heroku
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
