@@ -33,10 +33,10 @@ Run (in Docker)
 - Clone, set values_, and run in **Django+Postgres+Gunicorn+Nginx** configuration: ::
 
     $ git clone https://github.com/kylepw/panner.git && cd panner
-    $ # Acquire client ID/secret values (see above).
     $ cp env_template .env && vim .env
     $ docker-compose up --build
-    $ open http://127.0.0.1:8000
+
+- Open ``http://127.0.0.1:8000`` in a browser.
 
 Run (on Django development web server)
 ----------------------------------------
@@ -44,7 +44,7 @@ Run (on Django development web server)
 
     $ docker run --name db -p 5432:5432 -d postgres
 
-- Clone, install dependencies, set values_, migrate database, and run::
+- Clone, install dependencies, set values_, setup database, and run::
 
     $ git clone https://github.com/kylepw/panner.git && cd panner
     $ pip install pipenv && pipenv install
@@ -57,7 +57,8 @@ Run (on Django development web server)
     ...
     Starting development server at http://127.0.0.1:8000/
     Quit the server with CONTROL-C.
-    (panner)$ open http://127.0.0.1:8000
+
+- Open ``http://127.0.0.1:8000`` in a browser.
 
 Todo
 ----
