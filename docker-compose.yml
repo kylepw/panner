@@ -2,10 +2,10 @@ version: "3"
 
 services:
   db:
-    image: postgres
+    image: postgres:11
     restart: always
   redis:
-    image: redis
+    image: redis:5
     restart: always
   web:
     build: .
@@ -28,7 +28,7 @@ services:
       - db
       - redis
   proxy:
-    image: nginx
+    image: nginx:1
     restart: always
     ports:
       - "8000:80"
