@@ -40,9 +40,10 @@ Run (in Docker)
 
 Run (on Django development web server)
 ----------------------------------------
-- Start a Postgres database: ::
+- Start Postgres and Redis servers: ::
 
     $ docker run --name db -p 5432:5432 -d postgres
+    $ docker run --name redis -p 6379:6379 -d redis
 
 - Clone, install dependencies, set values_, setup database, and run::
 
@@ -51,7 +52,7 @@ Run (on Django development web server)
     $ cp env_template .env && vim .env
     $ pipenv shell
     (panner)$ # Make sure you have a Postgres server running at this point.
-    (panner)$ export DB_HOST=127.0.0.1
+    (panner)$ export DB_HOST=127.0.0.1 REDIS_URL=redis://127.0.0.1:6379/1
     (panner)$ ./manage.py migrate && ./manage.py loaddata people
     (panner)$ DEBUG=1 ./manage.py runserver
     ...
