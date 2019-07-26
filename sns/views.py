@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.contrib import messages
+from django.core.cache import cache
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
@@ -7,6 +9,9 @@ from sns.api.meetup import OAuth2Code as MeetupOAuth
 from sns.api.utils import GetActivity
 from sns.forms import ProfileForm
 from sns.models import Profile
+
+
+CACHE_TTL = settings.CACHE_TTL
 
 
 class ProfileList(ListView):
@@ -35,10 +40,16 @@ class Activity(DetailView):
 
         context['data'] = {}
         for sns, acct in context['profile'].get_fields():
-            if sns and acct:
-                self.request, context['data'][sns] = getattr(GetActivity, sns)(
-                    self.request, acct
-                )
+            if acct:
+                # Use cache if available
+                key = ':'.join([sns, acct])
+                if cache.get(key):
+                    context['data'][sns] = cache.get(key)
+                else:
+                    self.request, context['data'][sns] = getattr(GetActivity, sns)(
+                        self.request, acct
+                    )
+                    cache.set(key, context['data'][sns], CACHE_TTL)
         return context
 
 
