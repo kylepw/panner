@@ -39,18 +39,27 @@ class Activity(DetailView):
         context = super().get_context_data(**kwargs)
 
         context['data'] = {}
+        profile_cache = cache.get_many(cache.keys(':'.join([str(context['profile'].pk), '*'])))
         for sns, acct in context['profile'].get_fields():
             if acct:
+                key = ':'.join([str(context['profile'].pk), sns, acct])
                 # Use cache if available
-                key = ':'.join([sns, acct])
-                if cache.get(key):
-                    context['data'][sns] = cache.get(key)
+                if key in profile_cache:
+                    context['data'][sns] = profile_cache[key]
                 else:
                     self.request, context['data'][sns] = getattr(GetActivity, sns)(
                         self.request, acct
                     )
                     cache.set(key, context['data'][sns], CACHE_TTL)
         return context
+
+
+def refresh_activity(request, pk):
+    """Clear cache and reload activity view"""
+    if request.method == 'GET':
+        profile = get_object_or_404(Profile, pk=pk)
+        cache.delete_many(cache.keys(':'.join([str(profile.pk), '*'])))
+        return redirect('activity', pk=profile.pk)
 
 
 def profile_new(request):

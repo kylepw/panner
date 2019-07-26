@@ -13,6 +13,9 @@
         <a class="card-link text-info" href="{% url 'profile_edit' pk=profile.pk %}" title="Edit">
           <span class="oi oi-pencil"></span>
         </a>
+        <a class="card-link text-info" href="{% url 'refresh_activity' pk=profile.pk %}" title="Refresh">
+          <span class="oi oi-reload"></span>
+        </a>
     </div>
   </div>
   <div class="row justify-content-center">
