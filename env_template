@@ -30,7 +30,7 @@ DB_HOST=db
 DB_PORT=5432
 
 # Redis
-REDIS_URL=redis://db:6379/1
+REDIS_URL=redis://redis:6379/1
 
 # Necessary to allow non-https redirect URIs
 OAUTHLIB_INSECURE_TRANSPORT=1
