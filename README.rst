@@ -30,7 +30,7 @@ Run (in Docker)
 -----------------
 - Get Docker_.
 
-- Clone, set values_, and run in **Django+Postgres+Gunicorn+Nginx** configuration: ::
+- Clone, set values_, and run in **Django+Postgres+Redis+Gunicorn+Nginx** configuration: ::
 
     $ git clone https://github.com/kylepw/panner.git && cd panner
     $ cp env_template .env && vim .env
@@ -40,7 +40,7 @@ Run (in Docker)
 
 Run (on Django development web server)
 ----------------------------------------
-- Start Postgres and Redis servers: ::
+- Start Postgres and Redis servers (with Docker like here or locally): ::
 
     $ docker run --name db -p 5432:5432 -d postgres
     $ docker run --name redis -p 6379:6379 -d redis
@@ -51,7 +51,7 @@ Run (on Django development web server)
     $ pip install pipenv && pipenv install
     $ cp env_template .env && vim .env
     $ pipenv shell
-    (panner)$ # Make sure you have a Postgres server running at this point.
+    (panner)$ # Postgres & Redis servers should be running at this point.
     (panner)$ export DB_HOST=127.0.0.1 REDIS_URL=redis://127.0.0.1:6379/1
     (panner)$ ./manage.py migrate && ./manage.py loaddata people
     (panner)$ DEBUG=1 ./manage.py runserver
@@ -63,8 +63,8 @@ Run (on Django development web server)
 
 Todo
 ----
+- Improve UI.
 - More tests.
-- Caching.
 - Multiple user account support.
 
 License
