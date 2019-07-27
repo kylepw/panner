@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="{% static 'sns/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'sns/css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'sns/css/jquery-ui.min.css' %}">
   </head>
   <body>
     <!-- Nav bar -->
@@ -26,7 +27,7 @@
       </div>
       {% block search %}
       <form class="form-inline" action="{% url 'profile_search' %}" method="get">
-        <input class="form-control mr-sm-2" type="search" name="profile_query" aria-label="Check on a friend...">
+        <input class="form-control mr-sm-2" id="query_nav" type="search" name="profile_query" aria-label="Check on a friend...">
       </form>
       {% endblock %}
     </nav>
@@ -42,8 +43,22 @@
     {% endif %}
 
     {% block body %}{% endblock %}
-
-    <script src="{% static 'sns/js/jquery.slim.min.js' %}"></script>
+    <script src="{% static 'sns/js/jquery.min.js' %}"></script>
+    <script src="{% static 'sns/js/jquery-ui.min.js' %}"></script>
     <script src="{% static 'sns/js/bootstrap.bundle.min.js' %}"></script>
+    {% block script %}
+    <script>
+    $(function() {
+      $("#query_main, #query_nav").autocomplete({
+        source: "{% url 'profile_autocomplete' %}",
+        autoFocus: true,
+        select: function(event, ui) {
+          $(this).val(ui.item.label);
+          $(this).closest("form").submit();
+        }
+      });
+    });
+    </script>
+{% endblock %}
   </body>
 </html>

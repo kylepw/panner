@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('', views.profile_search, name='profile_search'),
+    path('autocomplete/', views.profile_autocomplete, name='profile_autocomplete'),
     path('profiles/', views.ProfileList.as_view(), name='profile-list'),
     path('profile/<int:pk>/', views.Activity.as_view(), name='activity'),
     path('profile/<int:pk>/refresh/', views.refresh_activity, name='refresh_activity'),

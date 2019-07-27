@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.cache import cache_page
 from django.views.generic import DetailView, ListView
 
 from sns.api.meetup import OAuth2Code as MeetupOAuth
@@ -10,8 +11,10 @@ from sns.api.utils import GetActivity
 from sns.forms import ProfileForm
 from sns.models import Profile
 
+import json
 
-CACHE_TTL = settings.CACHE_TTL
+
+API_CACHE_TTL = settings.API_CACHE_TTL
 
 
 class ProfileList(ListView):
@@ -50,7 +53,7 @@ class Activity(DetailView):
                     self.request, context['data'][sns] = getattr(GetActivity, sns)(
                         self.request, acct
                     )
-                    cache.set(key, context['data'][sns], CACHE_TTL)
+                    cache.set(key, context['data'][sns], API_CACHE_TTL)
         return context
 
 
@@ -65,7 +68,6 @@ def refresh_activity(request, pk):
 def profile_new(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST)
-
         if form.is_valid():
             post = form.save()
             messages.add_message(request, messages.SUCCESS, "Added '%s'." % post.name)
@@ -102,7 +104,8 @@ def profile_search(request):
     query = request.GET.get('profile_query')
     if query:
         try:
-            profile = Profile.objects.get(name=query)
+            # Match same name with different cased letters
+            profile = Profile.objects.get(name__iexact=query)
             return redirect('activity', pk=profile.pk)
         except Profile.DoesNotExist:
             messages.error(request, "'%s' doesn't exist. Try again." % query)
@@ -111,6 +114,19 @@ def profile_search(request):
     return render(
         request, 'sns/profile_search.html', {'profile_exists': profile_exists}
     )
+
+@cache_page(60 * 3)
+def profile_autocomplete(request):
+    """Return profiles matching autocomplete query"""
+    if request.is_ajax():
+        query = request.GET.get('term', '')
+        profiles = Profile.objects.filter(name__istartswith=query)
+        # Sort it so results show from shortest to longest
+        data = json.dumps(sorted([p.name for p in profiles], key=len))
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
 
 
 def meetup_dance(request, pk):

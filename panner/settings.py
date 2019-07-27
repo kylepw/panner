@@ -96,7 +96,7 @@ CACHES = {
     }
 }
 
-CACHE_TTL = 60 * 5
+API_CACHE_TTL = 60 * 5
 
 
 # Password validation
