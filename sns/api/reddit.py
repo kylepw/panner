@@ -3,6 +3,8 @@ from praw import Reddit
 import pytz
 import os
 
+MAX = 5
+
 
 def get_comments_submissions(username):
     reddit = Reddit(
@@ -11,7 +13,7 @@ def get_comments_submissions(username):
         user_agent=os.getenv('REDDIT_USER_AGENT'),
         read_only=True,
     )
-    comments = [
+    coms = [
         dict(
             title=comment.link_title,
             text=comment.body_html,
@@ -21,7 +23,7 @@ def get_comments_submissions(username):
         )
         for comment in reddit.redditor(username).comments.new(limit=5)
     ]
-    submissions = [
+    subs = [
         dict(
             title=submission.title,
             text=submission.selftext_html,
@@ -31,5 +33,5 @@ def get_comments_submissions(username):
         )
         for submission in reddit.redditor(username).submissions.new(limit=5)
     ]
-    data = comments + submissions
-    return data
+    return coms + subs if len(coms + subs) < MAX else (coms + subs)[:MAX]
+
