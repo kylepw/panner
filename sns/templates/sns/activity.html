@@ -59,6 +59,9 @@
               {% else %}
               <li class="list-group-item small">
                 <div class="row-auto" style="font-size:150%; font-weight:500">{{ d.text|truncatechars_html:120|safe }}</div>
+                {% if sns == 'twitter' %}
+                <div class="row-auto"><a class="card-link " href="https://twitter.com/{{ d.user_id }}/status/{{ d.status_id }}" target="_blank">View</a></div>
+                {% endif %}
                 <div class="row-auto mb-2 text-muted">{{ d.created|timesince }} ago</div>
               </li>
               {% endif %}

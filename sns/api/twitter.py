@@ -23,7 +23,7 @@ class Twitter:
         try:
             tweets = []
             for t in tweepy.Cursor(self.api.user_timeline, id=id).items(num):
-                tweets.append({'text': t.text, 'created': t.created_at})
+                tweets.append({'status_id': t.id_str, 'text': t.text, 'created': t.created_at, 'user_id': id})
             return tweets
         except tweepy.TweepError:
             logger.exception('Error! Failed to get tweets.')
