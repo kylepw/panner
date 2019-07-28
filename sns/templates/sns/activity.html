@@ -18,10 +18,10 @@
         </a>
     </div>
   </div>
-  <div class="row justify-content-center">
+  <div class="row w-100 justify-content-center">
   {% for sns, acct in profile.get_fields %}
   {% if acct %}
-    <div class="col-md-6 col-lg-4 col-xl-3">
+    <div class="col-auto col-xs-auto col-sm-auto col-md-6 col-lg-6 col-xl-4">
       <div class="card my-4">
         <h5 class="card-header"><a class="card-link text-info" href="https://{{ sns }}.com" target="_blank">{{ sns }}</a></h5>
         <div class="card-body">
