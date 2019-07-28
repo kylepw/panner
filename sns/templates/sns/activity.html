@@ -42,7 +42,7 @@
               <li class="list-group-item small">
                 <div class="row-auto"><a class="font-weight-bold card-link" href="{{ d.url }}" target="_blank">{{ d.title }}</a> on <a class="font-weight-bold" href="https://www.reddit.com/{{ d.subreddit }}" target="_blank">{{ d.subreddit }}</a></div>
                 <div class="row-auto mb-2 text-muted">{{ d.created|timesince }} ago</div>
-                <div class="row-auto"><pre>{{ d.text|truncatechars_html:120|safe }}</pre></div>
+                <div class="row-auto" style="font-size:150%; font-weight:500">{{ d.text|truncatechars_html:120|safe }}</div>
               </li>
               {% elif sns == 'meetup' %}
               <li class="list-group-item small">
@@ -58,7 +58,7 @@
               </li>
               {% else %}
               <li class="list-group-item small">
-                <div class="row-auto"><pre>{{ d.text|truncatechars_html:120|safe }}</pre></div>
+                <div class="row-auto" style="font-size:150%; font-weight:500">{{ d.text|truncatechars_html:120|safe }}</div>
                 <div class="row-auto mb-2 text-muted">{{ d.created|timesince }} ago</div>
               </li>
               {% endif %}
