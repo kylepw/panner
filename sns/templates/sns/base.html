@@ -15,21 +15,29 @@
   <body>
     <!-- Nav bar -->
     <nav class="navbar navbar-expand-sm navbar-dark bg-info">
-      <a class="navbar-brand" href="{% url 'profile_search' %}" title="Keep track of your friends">Panner</a>
+      <a class="navbar-brand pr-4" href="{% url 'profile_search' %}" title="Keep track of your friends">Panner</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="navbar-nav">
-          <a class="btn btn-info btn-sm nav-item nav-link" role="button" title="Add someone new" href="{% url 'profile_new' %}">+</button>
-          <a class="nav-item nav-link" title="See everyone" href="{% url 'profile-list' %}">People</a>
+          <div class="row">
+            <div class="col-1 col-sm-auto pr-0">
+              <a class="btn btn-info nav-item nav-link" role="button" title="Add someone new" href="{% url 'profile_new' %}">+</a>
+            </div>
+            <div class="col-auto">
+              <a class="nav-item nav-link" title="See everyone" href="{% url 'profile-list' %}">People</a>
+            </div>
+          </div>
         </div>
+        {% block search %}
+        <div class="ml-auto">
+          <form class="form-inline" action="{% url 'profile_search' %}" method="get">
+            <input class="form-control mr-sm-2" id="query_nav" type="search" name="profile_query" aria-label="Check on a friend...">
+          </form>
+        </div>
+        {% endblock %}
       </div>
-      {% block search %}
-      <form class="form-inline" action="{% url 'profile_search' %}" method="get">
-        <input class="form-control mr-sm-2" id="query_nav" type="search" name="profile_query" aria-label="Check on a friend...">
-      </form>
-      {% endblock %}
     </nav>
 
     {% if messages %}
