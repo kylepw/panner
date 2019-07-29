@@ -34,7 +34,7 @@
           <div class="card-title text-muted">{{ acct|truncatechars:20 }}</div>
           <div class="card-text">
             {% if sns == 'spotify' %}
-            <div class="row">
+            <div class="row pt-3">
               {% for s in sns_data.statuses %}
               <div class="col-auto">
                 <a href="{{ s.external_urls.spotify }}" target="_blank"><img class="mb-3" src="{{ s.images.0.url}} " height="100" title="{{ s.name }}" alt="{{ s.name }}"/></a>
