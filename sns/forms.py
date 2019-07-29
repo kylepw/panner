@@ -24,7 +24,7 @@ class ProfileForm(forms.ModelForm):
             if name:
                 # Don't allow same name with different cased letters
                 if Profile.objects.filter(name__iexact=name):
-                    msg = 'Profile with this name already exists.'
+                    msg = 'Profile with this Name already exists.'
                     self.add_error('name', msg)
 
         return data
