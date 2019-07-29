@@ -24,14 +24,18 @@
     {% with data|get_sns:sns as sns_data %}
     <div class="col-auto col-xs-auto col-sm-auto col-md-6 col-lg-6 col-xl-4">
       <div class="card my-4">
-        <h5 class="card-header">
-          <a class="card-link text-info" href="{{ sns_data.user.url }}" target="_blank">{{ sns }}</a>
+        <h5 class="card-header text-center">
+          <a class="card-link text-info" href="{{ sns_data.user.url }}" title="View Profile" target="_blank">{{ sns }}</a>
         </h5>
         <div class="card-body">
           {% if sns_data.user.img %}
-          <div class="card-title"><img style="max-width:30%; width:auto;" src="{{ sns_data.user.img }}"></div>
+          <div class="card-title text-center">
+            <a href="{{ sns_data.user.url }}" target="_blank">
+              <img style="max-width:30%; width:auto;" title="View Profile" src="{{ sns_data.user.img }}">
+            </a>
+          </div>
           {% endif %}
-          <div class="card-title text-muted">{{ acct|truncatechars:20 }}</div>
+          <div class="card-title text-muted text-center">{{ acct|truncatechars:20 }}</div>
           <div class="card-text">
             {% if sns == 'spotify' %}
             <div class="row pt-3">
