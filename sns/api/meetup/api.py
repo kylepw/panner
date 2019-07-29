@@ -50,18 +50,21 @@ class Meetup:
             next_page = data.get('meta').get('next') if data.get('meta') else None
             if not next_page:
                 break
-
         return results
 
     def get_member(self, id='self'):
         """Retrieve a single member"""
-        return requests.get(
-            self._url_for_endpoint(f'2/member/{str(id)}'), auth=self.auth.apply_auth()
+        r = requests.get(
+            self._url_for_endpoint(f'members/{str(id)}'), auth=self.auth.apply_auth()
         ).json()
+        if r.get('errors'):
+            logger.exception('Failed to get member %s: %s', id, r.get('errors'))
+            return None
+        return r
 
     def is_member(self, id='self'):
         """Return boolean if registered member or not."""
-        return self.get_member(id).get('code') != 'not_found'
+        return self.get_member(id).get('id')
 
     def user_activity(self, id):
         """Retrieve recent activity of a user in one or more of your registered groups."""
