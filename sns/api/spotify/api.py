@@ -56,8 +56,8 @@ class Spotify:
             self._url_for_endpoint('me'), auth=self.auth.apply_auth()
         ).json()
 
-    def get_profile_photo(self, id=None):
-        """Return profile photo URL or None."""
+    def profile_image_url(self, id=None):
+        """Return profile image URL or None."""
         if id:
             profile = self.get_profile(id)
             images = profile.get('images') or []

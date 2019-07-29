@@ -6,7 +6,7 @@ import logging
 from .meetup import Meetup, OAuth2Code as MeetupOAuth
 from .spotify import Spotify, OAuth2Client as SpotifyOAuth
 from .twitter import Twitter
-from .reddit import get_comments_submissions
+from .reddit import Reddit
 
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler()
@@ -63,7 +63,7 @@ class GetActivity:
                 'user': {
                     'url': urls.get('spotify') if urls else 'https://open.spotify.com/user/%s' % str(id),
                     # Make another fetch for photo data as last resort
-                    'img': images[0].get('url') if images else (spotify.get_profile_photo(id) or ''),
+                    'img': images[0].get('url') if images else (spotify.profile_image_url(id) or ''),
                 },
                 'statuses': playlists,
             }
@@ -76,12 +76,13 @@ class GetActivity:
     @staticmethod
     def reddit(request, username):
         """Return latest Reddit activity"""
+        reddit = Reddit()
         data = {
             'user': {
-                'url': '',
-                'img': '',
+                'url': reddit.profile_url(username),
+                'img': reddit.profile_image_url(username) or '',
             },
-            'statuses': get_comments_submissions(username),
+            'statuses': reddit.get_comments_submissions(username),
         }
         return request, data
 
