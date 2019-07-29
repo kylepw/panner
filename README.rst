@@ -1,7 +1,7 @@
 ======
 Panner
 ======
-Django-powered web app to keep track of friends.
+Django+Postgres+Redis-powered web app to keep track of friends.
 
 Try it: https://panner.herokuapp.com
 
@@ -12,6 +12,8 @@ Features
 - Supports: Meetup, Reddit, Spotify, and Twitter accounts.
 - Simple, easy-to-navigate interface.
 - Timesaver.
+- Redis caching for faster load times.
+- Mobile responsive.
 - Robust test coverage.
 
 Requirements
@@ -40,7 +42,7 @@ Run (in Docker)
 
 Run (on Django development web server)
 ----------------------------------------
-- Start Postgres and Redis servers (with Docker like here or locally): ::
+- Start Postgres and Redis servers (with Docker like here or another method): ::
 
     $ docker run --name db -p 5432:5432 -d postgres:11
     $ docker run --name redis -p 6379:6379 -d redis:5
@@ -63,8 +65,8 @@ Run (on Django development web server)
 
 Todo
 ----
-- Improve UI.
 - More tests.
+- Add Github API support.
 - Multiple user account support.
 
 License
