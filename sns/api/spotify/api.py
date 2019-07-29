@@ -36,7 +36,7 @@ class Spotify:
         self.auth = auth
 
     def get_playlists(self, id=None):
-        """Retrieve playlists that user created and follows"""
+        """Retrieve playlists that user created and follows."""
         if id:
             return requests.get(
                 self._url_for_endpoint(f'users/{str(id)}/playlists'),
@@ -47,7 +47,7 @@ class Spotify:
         ).json()
 
     def get_profile(self, id=None):
-        """Return profile information"""
+        """Return profile information."""
         if id:
             return requests.get(
                 self._url_for_endpoint(f'users/{str(id)}'), auth=self.auth.apply_auth()
@@ -55,6 +55,16 @@ class Spotify:
         return requests.get(
             self._url_for_endpoint('me'), auth=self.auth.apply_auth()
         ).json()
+
+    def get_profile_photo(self, id=None):
+        """Return profile photo URL or None."""
+        if id:
+            profile = self.get_profile(id)
+            images = profile.get('images') or []
+            return images[0].get('url') if images else None
+
+
+
 
     def _url_for_endpoint(self, endpoint):
         return 'https://' + self.API_HOST + self.API_ROOT + endpoint

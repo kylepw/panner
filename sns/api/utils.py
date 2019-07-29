@@ -27,7 +27,14 @@ class GetActivity:
                 request.session['meetup_token'] = auth.refresh_token()
             try:
                 meetup = Meetup(auth)
-                return request, meetup.user_activity(id)
+                data = {
+                    'user': {
+                        'url': meetup.profile_url(id),
+                        'img': meetup.get_member_photo(id),
+                    },
+                    'statuses': meetup.user_activity(id),
+                }
+                return request, data
             except Exception:
                 logger.exception('Failed to fetch data from Meetup API.')
 
@@ -48,7 +55,19 @@ class GetActivity:
                 spotify = Spotify()
                 request.session['spotify_token'] = spotify.auth.token
 
-            return request, spotify.get_playlists(id).get('items')
+            playlists = spotify.get_playlists(id).get('items')
+            user = playlists[0].get('owner') if playlists else {}
+            images = user.get('images') if user else []
+            urls = user.get('external_urls') if user else {}
+            data = {
+                'user': {
+                    'url': urls.get('spotify') if urls else 'https://open.spotify.com/user/%s' % str(id),
+                    # Make another fetch for photo data as last resort
+                    'img': images[0].get('url') if images else (spotify.get_profile_photo(id) or ''),
+                },
+                'statuses': playlists,
+            }
+            return request, data
 
         except Exception:
             logger.exception('Failed to fetch data from Spotify API.')
@@ -57,10 +76,26 @@ class GetActivity:
     @staticmethod
     def reddit(request, username):
         """Return latest Reddit activity"""
-        return request, get_comments_submissions(username)
+        data = {
+            'user': {
+                'url': '',
+                'img': '',
+            },
+            'statuses': get_comments_submissions(username),
+        }
+        return request, data
 
     @staticmethod
     def twitter(request, id):
         """Return latest tweets"""
-        api = Twitter()
-        return request, api.get_tweets(id=id, num=5)
+        twitter = Twitter()
+        statuses = twitter.get_tweets(id=id, num=5)
+        user = statuses[0].get('user') if statuses else None
+        data = {
+            'user': {
+                'url': twitter.profile_url(id),
+                'img': user.profile_image_url if user else '',
+            },
+            'statuses': statuses,
+        }
+        return request, data

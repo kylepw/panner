@@ -62,9 +62,20 @@ class Meetup:
             return None
         return r
 
+    def get_member_photo(self, id='self'):
+        """Return a member's thumbnail photo or None."""
+        member = self.get_member(id)
+        photos = member.get('photo') if member else {}
+        return photos.get('thumb_link')
+
     def is_member(self, id='self'):
         """Return boolean if registered member or not."""
         return self.get_member(id).get('id')
+
+    @staticmethod
+    def profile_url(id):
+        """Return id member's profile URL."""
+        return 'https://www.meetup.com/members/%s' % str(id)
 
     def user_activity(self, id):
         """Retrieve recent activity of a user in one or more of your registered groups."""

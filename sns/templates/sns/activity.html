@@ -21,48 +21,54 @@
   <div class="row w-100 justify-content-center">
   {% for sns, acct in profile.get_fields %}
   {% if acct %}
+    {% with data|get_sns:sns as sns_data %}
     <div class="col-auto col-xs-auto col-sm-auto col-md-6 col-lg-6 col-xl-4">
       <div class="card my-4">
-        <h5 class="card-header"><a class="card-link text-info" href="https://{{ sns }}.com" target="_blank">{{ sns }}</a></h5>
+        <h5 class="card-header">
+          <a class="card-link text-info" href="{{ sns_data.user.url }}" target="_blank">{{ sns }}</a>
+        </h5>
         <div class="card-body">
+          {% if sns_data.user.img %}
+          <div class="card-title"><img style="max-width:30%; width:auto;" src="{{ sns_data.user.img }}"></div>
+          {% endif %}
           <div class="card-title text-muted">{{ acct|truncatechars:20 }}</div>
           <div class="card-text">
             {% if sns == 'spotify' %}
             <div class="row">
-              {% for d in data|get_sns:sns %}
+              {% for s in sns_data.statuses %}
               <div class="col-auto">
-                <a href="{{ d.external_urls.spotify }}" target="_blank"><img class="mb-3" src="{{ d.images.0.url}} " height="100" title="{{ d.name }}" alt="{{ d.name }}"/></a>
+                <a href="{{ s.external_urls.spotify }}" target="_blank"><img class="mb-3" src="{{ s.images.0.url}} " height="100" title="{{ s.name }}" alt="{{ s.name }}"/></a>
               </div>
               {% endfor %}
             </div>
             {% else %}
             <ul class="list-group list-group-flush">
-              {% for d in data|get_sns:sns|dictsortreversed:'created' %}
+              {% for s in sns_data.statuses|dictsortreversed:'created' %}
               {% if sns == 'reddit' %}
               <li class="list-group-item small">
-                <div class="row-auto"><a class="font-weight-bold card-link" href="{{ d.url }}" target="_blank">{{ d.title }}</a> on <a class="font-weight-bold" href="https://www.reddit.com/{{ d.subreddit }}" target="_blank">{{ d.subreddit }}</a></div>
-                <div class="row-auto mb-2 text-muted">{{ d.created|timesince }} ago</div>
-                <div class="row-auto" style="font-size:150%; font-weight:500">{{ d.text|truncatechars_html:120|safe }}</div>
+                <div class="row-auto"><a class="font-weight-bold card-link" href="{{ s.url }}" target="_blank">{{ s.title }}</a> on <a class="font-weight-bold" href="https://www.reddit.com/{{ s.subreddit }}" target="_blank">{{ s.subreddit }}</a></div>
+                <div class="row-auto mb-2 text-muted">{{ s.created|timesince }} ago</div>
+                <div class="row-auto" style="font-size:150%; font-weight:500">{{ s.text|truncatechars_html:120|safe }}</div>
               </li>
               {% elif sns == 'meetup' %}
               <li class="list-group-item small">
-                {% if d.photo_url %}
+                {% if s.photo_url %}
                 <div class="row">
-                  <div class="col"><h3><img src="{{ d.photo_url }}"/></div>
+                  <div class="col"><h3><img src="{{ s.photo_url }}"/></div>
                 </div>
                 {% endif %}
                 <div class="row mb-1">
-                  <a class="font-weight-bold card-link" href="{{ d.link }}" target="_blank">{{ d.title }}{% if d.rsvp_response %} ({{ d.rsvp_response }}){% endif %}</a>
+                  <a class="font-weight-bold card-link" href="{{ s.link }}" target="_blank">{{ s.title }}{% if s.rsvp_response %} ({{ s.rsvp_response }}){% endif %}</a>
                 </div>
-                <div class="row text-muted">{{ d.created|timesince }} ago</div>
+                <div class="row text-muted">{{ s.created|timesince }} ago</div>
               </li>
               {% else %}
               <li class="list-group-item small">
-                <div class="row-auto" style="font-size:150%; font-weight:500">{{ d.text|truncatechars_html:120|safe }}</div>
+                <div class="row-auto" style="font-size:150%; font-weight:500">{{ s.text|truncatechars_html:120|safe }}</div>
                 {% if sns == 'twitter' %}
-                <div class="row-auto"><a class="card-link " href="https://twitter.com/{{ d.user_id }}/status/{{ d.status_id }}" target="_blank">View</a></div>
+                <div class="row-auto"><a class="card-link " href="https://twitter.com/{{ acct }}/status/{{ s.status_id }}" target="_blank">View</a></div>
                 {% endif %}
-                <div class="row-auto mb-2 text-muted">{{ d.created|timesince }} ago</div>
+                <div class="row-auto mb-2 text-muted">{{ s.created|timesince }} ago</div>
               </li>
               {% endif %}
             {% empty %}
@@ -74,6 +80,7 @@
         </div>
       </div>
     </div>
+    {% endwith %}
   {% endif %}
   {% endfor %}
   </div>
