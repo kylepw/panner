@@ -32,15 +32,15 @@
               {% endif %}
             </div>
             {% endfor %}
-            <div class="row justify-content-between">
-              <div class="col-4">
-                <button class="btn btn-info" type="submit">Save</button>
-              </div>
+            <div class="row">
               {% if form.instance.pk %}
-              <div class="col-4">
+              <div class="col-4 mr-auto">
                 <a class="btn btn-danger" href="{% url 'profile_delete' pk=form.instance.pk %}" role="button">Delete</a>
               </div>
               {% endif %}
+              <div class="col-4 ml-auto">
+                <button class="btn btn-info" type="submit">Save</button>
+              </div>
             </div>
           </form>
         </div>
