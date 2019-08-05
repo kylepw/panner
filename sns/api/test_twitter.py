@@ -1,15 +1,16 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from .twitter import logging, os, tweepy, Twitter
+from .twitter import logging, tweepy, Twitter
 
 logger = logging.getLogger('twitter')
 
 
 class TwitterTests(TestCase):
+
     def setUp(self):
-        patch_consumer_key = patch.object(Twitter, '_CONSUMER_KEY')
-        patch_secret_key = patch.object(Twitter, '_CONSUMER_SECRET_KEY')
+        patch_consumer_key = patch.object(Twitter, 'consumer_key')
+        patch_secret_key = patch.object(Twitter, 'consumer_secret_key')
         patch_appauth = patch('tweepy.AppAuthHandler')
         patch_api = patch('tweepy.API')
 
