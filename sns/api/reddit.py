@@ -22,7 +22,7 @@ class Reddit:
         self.api = PrawReddit(
             client_id=self.client_id,
             client_secret=self.client_secret,
-            user_agent=os.getenv('REDDIT_USER_AGENT'),
+            user_agent=self.user_agent,
             read_only=True,
         )
 
@@ -55,7 +55,7 @@ class Reddit:
         try:
             return self.api.redditor(username).icon_img
         except prawcore.exceptions.NotFound:
-            logging.exception('Failed to fetch Reddit profile image of %s', username)
+            logger.exception('Failed to fetch Reddit profile image of %s', username)
             return None
 
     @staticmethod
