@@ -1,35 +1,67 @@
-import pdb
+from praw.models import Comment, Submission
+from reddit import datetime, logging, NotFound, os, PrawReddit, pytz, Reddit
+from requests import Response
 from unittest import TestCase
 from unittest.mock import call, Mock, MagicMock, patch
-
-from reddit import datetime, logging, os, prawcore, PrawReddit, pytz, Reddit
-from praw.models import Comment, Submission
 
 logger = logging.getLogger('reddit')
 
 
-class PrawTests(TestCase):
+class RedditTests(TestCase):
 
     def test_praw_reddit_called_when_making_instance(self):
+        client_id = 'id'
+        client_secret = 'secret'
+        user_agent = 'agent'
+
         with patch('reddit.PrawReddit') as MockPrawReddit:
             p = MockPrawReddit.return_value
-            p.client_id = 'id'
-            p.client_secret = 'secret'
-            p.user_agent = 'agent'
+            p.client_id = client_id
+            p.client_secret = client_secret
+            p.user_agent = user_agent
 
-            Reddit('id', 'secret', 'agent')
+            Reddit(client_id, client_secret, user_agent)
 
         MockPrawReddit.assert_called_once_with(
-            client_id='id', client_secret='secret', user_agent='agent', read_only=True
+            client_id=client_id, client_secret=client_secret, user_agent=user_agent, read_only=True
         )
+
+    @patch.object(logger, 'exception')
+    def test_profile_image_url_logs_on_notfound_exception(self, mock_logger):
+        username = 'joe'
+
+        r = Reddit('id', 'secret', 'agent')
+        r.api = Mock()
+
+        r.api.redditor.side_effect = NotFound(Response())
+        r.profile_image_url(username)
+
+        mock_logger.assert_called_once_with('Failed to fetch Reddit profile image of %s', username)
 
 
 class GetCommentsSubmissionsTest(TestCase):
 
     def setUp(self):
-        # mock self.api
+        self.mock_api = MagicMock()
+
+        patch_datetime = patch('reddit.datetime')
+        patch_pytz = patch('reddit.pytz')
+
+        self.mock_datetime = patch_datetime.start()
+        self.mock_pytz = patch_pytz.start()
+
+        self.addCleanup(patch_datetime.stop)
+        self.addCleanup(patch_pytz.stop)
+
+    def mock_comments_submissions(self, num=5):
+        """Return tuple of mock comments and submissions"""
+
+        # Pretend API limit at 20 results per call
+        num = num if num < 20 else 20
+
         mock_comment = Mock()
         mock_submission = Mock()
+
         comment_attrs = {
             'link_title': 'foo',
             'body_html': 'foo',
@@ -46,45 +78,67 @@ class GetCommentsSubmissionsTest(TestCase):
         }
         mock_comment.configure_mock(**comment_attrs)
         mock_submission.configure_mock(**submission_attrs)
+
         mock_comments = MagicMock()
         mock_submissions = MagicMock()
-        mock_comments.new.return_value = iter([mock_comment]*20)
-        mock_submissions.new.return_value = iter([mock_submission]*20)
-        self.mock_api = MagicMock()
-        self.mock_api.redditor.return_value.comments = mock_comments
-        self.mock_api.redditor.return_value.submissions = mock_submissions
+        mock_comments.new.return_value = iter([mock_comment]*num)
+        mock_submissions.new.return_value = iter([mock_submission]*num)
 
-        patch_datetime = patch('reddit.datetime')
-        patch_pytz = patch('reddit.pytz')
-
-        self.mock_datetime = patch_datetime.start()
-        self.mock_pytz = patch_pytz.start()
-
-        self.addCleanup(patch_datetime.stop)
-        self.addCleanup(patch_pytz.stop)
+        return mock_comments, mock_submissions
 
     def test_comments_submissions_calls(self):
         username = 'joe'
-        num = 5
 
         r = Reddit('id', 'secret', 'agent')
         r.api = self.mock_api
-        r.get_comments_submissions(username, num=num)
+        r.get_comments_submissions(username)
 
-        chained_comments = call.redditor(username).comments.new(limit=num)
-        chained_submissions = call.redditor(username).submissions.new(limit=num)
+        chained_comments = call.redditor(username).comments.new(limit=5)
+        chained_submissions = call.redditor(username).submissions.new(limit=5)
 
         call_list_comments = chained_comments.call_list()
         call_list_submissions = chained_submissions.call_list()
 
-        self.mock_api.assert_has_calls(call_list_comments)
-        self.mock_api.assert_has_calls(call_list_submissions)
+        r.api.assert_has_calls(call_list_comments)
+        r.api.assert_has_calls(call_list_submissions)
 
-    def test_num_of_results_5(self):
-        num = 5
+    def test_num_of_results_0(self):
+        num = 0
+
+        mock_comments, mock_submissions = self.mock_comments_submissions(num)
+        self.mock_api.redditor.return_value.comments = mock_comments
+        self.mock_api.redditor.return_value.submissions = mock_submissions
 
         r = Reddit('id', 'secret', 'agent')
         r.api = self.mock_api
 
-        self.assertEqual(len(r.get_comments_submissions('joe', num=num)), 5)
+        self.assertEqual(len(r.get_comments_submissions('joe', num=num)), 0)
+
+    def test_num_of_results_7(self):
+        num = 7
+
+        mock_comments, mock_submissions = self.mock_comments_submissions(num)
+        self.mock_api.redditor.return_value.comments = mock_comments
+        self.mock_api.redditor.return_value.submissions = mock_submissions
+
+        r = Reddit('id', 'secret', 'agent')
+        r.api = self.mock_api
+
+        self.assertEqual(len(r.get_comments_submissions('joe', num=num)), 7)
+
+    def test_num_of_results_100(self):
+        num = 100
+
+        mock_comments, mock_submissions = self.mock_comments_submissions(num)
+        self.mock_api.redditor.return_value.comments = mock_comments
+        self.mock_api.redditor.return_value.submissions = mock_submissions
+
+        r = Reddit('id', 'secret', 'agent')
+        r.api = self.mock_api
+
+        # API results limited to 20 per call
+        self.assertEqual(len(r.get_comments_submissions('joe', num=num)), 40)
+
+
+
 

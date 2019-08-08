@@ -2,7 +2,7 @@ from datetime import datetime
 import logging
 import os
 from praw import Reddit as PrawReddit
-import prawcore.exceptions
+from prawcore.exceptions import NotFound
 import pytz
 
 logger = logging.getLogger(__name__)
@@ -54,7 +54,7 @@ class Reddit:
         """Return URL of user's avatar image."""
         try:
             return self.api.redditor(username).icon_img
-        except prawcore.exceptions.NotFound:
+        except NotFound:
             logger.exception('Failed to fetch Reddit profile image of %s', username)
             return None
 
