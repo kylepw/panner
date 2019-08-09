@@ -76,27 +76,36 @@ class GetActivity:
     @staticmethod
     def reddit(request, username):
         """Return latest Reddit activity"""
-        reddit = Reddit()
-        data = {
-            'user': {
-                'url': reddit.profile_url(username),
-                'img': reddit.profile_image_url(username) or '',
-            },
-            'statuses': reddit.get_comments_submissions(username),
-        }
-        return request, data
+        try:
+            reddit = Reddit()
+            data = {
+                'user': {
+                    'url': reddit.profile_url(username),
+                    'img': reddit.profile_image_url(username) or '',
+                },
+                'statuses': reddit.get_comments_submissions(username),
+            }
+            return request, data
+        except Exception:
+            logger.exception('Failed to fetch data from Reddit API.')
+            return request, None
+
 
     @staticmethod
     def twitter(request, id):
         """Return latest tweets"""
-        twitter = Twitter()
-        statuses = twitter.get_tweets(id=id, num=5)
-        user = statuses[0].get('user') if statuses else None
-        data = {
-            'user': {
-                'url': twitter.profile_url(id),
-                'img': user.profile_image_url if user else '',
-            },
-            'statuses': statuses,
-        }
-        return request, data
+        try:
+            twitter = Twitter()
+            statuses = twitter.get_tweets(id=id, num=5)
+            user = statuses[0].get('user') if statuses else None
+            data = {
+                'user': {
+                    'url': twitter.profile_url(id),
+                    'img': user.profile_image_url if user else '',
+                },
+                'statuses': statuses,
+            }
+            return request, data
+        except Exception:
+            logger.exception('Failed to fetch data from Twitter API.')
+            return request, None
