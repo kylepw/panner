@@ -3,10 +3,10 @@
 from django.shortcuts import redirect
 import logging
 
-from .meetup import Meetup, OAuth2Code as MeetupOAuth
-from .spotify import Spotify, OAuth2Client as SpotifyOAuth
-from .twitter import Twitter
-from .reddit import Reddit
+from meetup import Meetup, OAuth2Code as MeetupOAuth
+from spotify import Spotify, OAuth2Client as SpotifyOAuth
+from twitter import Twitter
+from reddit import Reddit
 
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler()
