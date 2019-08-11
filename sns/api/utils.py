@@ -3,10 +3,10 @@
 from django.shortcuts import redirect
 import logging
 
-from meetup import Meetup, OAuth2Code as MeetupOAuth
-from spotify import Spotify, OAuth2Client as SpotifyOAuth
-from twitter import Twitter
-from reddit import Reddit
+from .meetup import Meetup, OAuth2Code as MeetupOAuth
+from .spotify import Spotify, OAuth2Client as SpotifyOAuth
+from .twitter import Twitter
+from .reddit import Reddit
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,6 @@ class GetActivity:
                 spotify = Spotify()
                 request.session['spotify_token'] = spotify.auth.token
 
-
             playlists = spotify.get_playlists(id).get('items')
             user = playlists[0].get('owner') if playlists else {}
             images = user.get('images') if user else []
@@ -92,6 +91,7 @@ class GetActivity:
     def twitter(request, id):
         """Return latest tweets"""
         try:
+            logger.info('Getting Twitter info...')
             twitter = Twitter()
             statuses = twitter.get_tweets(id=id, num=5)
             user = statuses[0].get('user') if statuses else None

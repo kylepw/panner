@@ -12,7 +12,9 @@ from sns.forms import ProfileForm
 from sns.models import Profile
 
 import json
+import logging
 
+logger = logging.getLogger(__name__)
 
 API_CACHE_TTL = settings.API_CACHE_TTL
 

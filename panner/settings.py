@@ -1,5 +1,7 @@
 """Django settings for panner project."""
 
+from django.utils.log import DEFAULT_LOGGING
+import logging.config
 import os
 
 
@@ -24,6 +26,45 @@ if not DEBUG:
     # CSRF_COOKIE_SECURE = True
     # SECURE_HSTS_SECONDS = 3600
     # SECURE_SSL_REDIRECT = True
+
+
+# Logging config
+#
+LOGGING_CONFIG = None
+
+LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
+
+logging.config.dictConfig({
+    'version': 1,
+    'disable_existing_logger': False,
+    'formatters': {
+        'default': {
+            'format': '%(asctime)s - %(name)-12s %(levelname)-8s - %(message)s',
+        },
+        'django.server': DEFAULT_LOGGING['formatters']['django.server'],
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+        },
+        'django.server': DEFAULT_LOGGING['handlers']['django.server'],
+    },
+    'loggers': {
+        '': {
+            'level': 'INFO',
+            'handlers': ['console'],
+        },
+        'panner': {
+            'level': LOGLEVEL,
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        # Default runserver request logging
+        'django.server': DEFAULT_LOGGING['loggers']['django.server'],
+    },
+})
 
 
 # Application definition
