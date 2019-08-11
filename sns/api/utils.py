@@ -9,10 +9,6 @@ from twitter import Twitter
 from reddit import Reddit
 
 logger = logging.getLogger(__name__)
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 
 
 class GetActivity:
@@ -54,6 +50,7 @@ class GetActivity:
             else:
                 spotify = Spotify()
                 request.session['spotify_token'] = spotify.auth.token
+
 
             playlists = spotify.get_playlists(id).get('items')
             user = playlists[0].get('owner') if playlists else {}

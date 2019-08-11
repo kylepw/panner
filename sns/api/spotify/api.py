@@ -3,10 +3,6 @@ import requests
 from .auth import OAuth2Client
 
 logger = logging.getLogger(__name__)
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 
 
 class Spotify:
