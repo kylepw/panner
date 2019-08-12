@@ -25,20 +25,36 @@ class TestGetActivity(TestCase):
         # Required to reach `try` block
         self.mock_request.session['meetup_token'] = 'xxx'
 
-        self.assertEqual(GetActivity().meetup(self.mock_request, self.id), (self.mock_request, None))
-        self.mock_exception.assert_called_once_with('Failed to fetch data from Meetup API.')
+        self.assertEqual(
+            GetActivity().meetup(self.mock_request, self.id), (self.mock_request, None)
+        )
+        self.mock_exception.assert_called_once_with(
+            'Failed to fetch data from Meetup API.'
+        )
 
     @patch('utils.Spotify', side_effect=Exception('Boom!'))
     def test_spotify(self, mock_spotify):
-        self.assertEqual(GetActivity().spotify(self.mock_request, self.id), (self.mock_request, None))
-        self.mock_exception.assert_called_once_with('Failed to fetch data from Spotify API.')
+        self.assertEqual(
+            GetActivity().spotify(self.mock_request, self.id), (self.mock_request, None)
+        )
+        self.mock_exception.assert_called_once_with(
+            'Failed to fetch data from Spotify API.'
+        )
 
     @patch('utils.Reddit', side_effect=Exception('Boom!'))
     def test_reddit(self, mock_spotify):
-        self.assertEqual(GetActivity().reddit(self.mock_request, self.id), (self.mock_request, None))
-        self.mock_exception.assert_called_once_with('Failed to fetch data from Reddit API.')
+        self.assertEqual(
+            GetActivity().reddit(self.mock_request, self.id), (self.mock_request, None)
+        )
+        self.mock_exception.assert_called_once_with(
+            'Failed to fetch data from Reddit API.'
+        )
 
     @patch('utils.Twitter', side_effect=Exception('Boom!'))
     def test_twitter(self, mock_twitter):
-        self.assertEqual(GetActivity().twitter(self.mock_request, self.id), (self.mock_request, None))
-        self.mock_exception.assert_called_once_with('Failed to fetch data from Twitter API.')
+        self.assertEqual(
+            GetActivity().twitter(self.mock_request, self.id), (self.mock_request, None)
+        )
+        self.mock_exception.assert_called_once_with(
+            'Failed to fetch data from Twitter API.'
+        )

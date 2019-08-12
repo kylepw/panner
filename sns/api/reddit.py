@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 class Reddit:
-
     def __init__(self, client_id=None, client_secret=None, user_agent=None):
         self.client_id = client_id or os.getenv('REDDIT_CLIENT_ID')
         self.client_secret = client_secret or os.getenv('REDDIT_CLIENT_SECRET')
@@ -58,6 +57,3 @@ class Reddit:
     def profile_url(username):
         """Return URL of user's profile."""
         return 'https://www.reddit.com/user/%s' % username
-
-
-

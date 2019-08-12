@@ -21,6 +21,7 @@ class Spotify:
         {"href":...}
 
     """
+
     API_HOST = 'api.spotify.com'
     API_ROOT = '/v1/'
 
@@ -57,9 +58,6 @@ class Spotify:
             profile = self.get_profile(id)
             images = profile.get('images') or []
             return images[0].get('url') if images else None
-
-
-
 
     def _url_for_endpoint(self, endpoint):
         return 'https://' + self.API_HOST + self.API_ROOT + endpoint

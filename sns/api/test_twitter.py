@@ -7,7 +7,6 @@ logger = logging.getLogger('twitter')
 
 
 class TwitterTests(TestCase):
-
     def setUp(self):
         patch_consumer_key = patch.object(Twitter, 'consumer_key')
         patch_secret_key = patch.object(Twitter, 'consumer_secret_key')

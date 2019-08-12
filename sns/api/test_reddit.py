@@ -8,7 +8,6 @@ logger = logging.getLogger('reddit')
 
 
 class RedditTests(TestCase):
-
     def test_praw_reddit_called_when_making_instance(self):
         client_id = 'id'
         client_secret = 'secret'
@@ -23,7 +22,10 @@ class RedditTests(TestCase):
             Reddit(client_id, client_secret, user_agent)
 
         MockPrawReddit.assert_called_once_with(
-            client_id=client_id, client_secret=client_secret, user_agent=user_agent, read_only=True
+            client_id=client_id,
+            client_secret=client_secret,
+            user_agent=user_agent,
+            read_only=True,
         )
 
     @patch.object(logger, 'exception')
@@ -36,11 +38,12 @@ class RedditTests(TestCase):
         r.api.redditor.side_effect = NotFound(Response())
         r.profile_image_url(username)
 
-        mock_logger.assert_called_once_with('Failed to fetch Reddit profile image of %s', username)
+        mock_logger.assert_called_once_with(
+            'Failed to fetch Reddit profile image of %s', username
+        )
 
 
 class GetCommentsSubmissionsTest(TestCase):
-
     def setUp(self):
         self.mock_api = MagicMock()
 
@@ -81,8 +84,8 @@ class GetCommentsSubmissionsTest(TestCase):
 
         mock_comments = MagicMock()
         mock_submissions = MagicMock()
-        mock_comments.new.return_value = iter([mock_comment]*num)
-        mock_submissions.new.return_value = iter([mock_submission]*num)
+        mock_comments.new.return_value = iter([mock_comment] * num)
+        mock_submissions.new.return_value = iter([mock_submission] * num)
 
         return mock_comments, mock_submissions
 
@@ -138,7 +141,3 @@ class GetCommentsSubmissionsTest(TestCase):
 
         # API results limited to 20 per call
         self.assertEqual(len(r.get_comments_submissions('joe', num=num)), 40)
-
-
-
-

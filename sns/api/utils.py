@@ -23,7 +23,9 @@ class GetActivity:
             if auth.is_token_expired():
                 logger.info('Meetup token expired. Refreshing...')
                 request.session['meetup_token'] = auth.refresh_token()
-                logger.debug('New Meetup token: %s', request.session.get('meetup_token'))
+                logger.debug(
+                    'New Meetup token: %s', request.session.get('meetup_token')
+                )
             try:
                 logger.info('Fetching Meetup data')
                 meetup = Meetup(auth)
@@ -63,9 +65,13 @@ class GetActivity:
             urls = user.get('external_urls') if user else {}
             data = {
                 'user': {
-                    'url': urls.get('spotify') if urls else 'https://open.spotify.com/user/%s' % str(id),
+                    'url': urls.get('spotify')
+                    if urls
+                    else 'https://open.spotify.com/user/%s' % str(id),
                     # Make another fetch for photo data as last resort
-                    'img': images[0].get('url') if images else (spotify.profile_image_url(id) or ''),
+                    'img': images[0].get('url')
+                    if images
+                    else (spotify.profile_image_url(id) or ''),
                 },
                 'statuses': playlists,
             }
@@ -93,7 +99,6 @@ class GetActivity:
         except Exception:
             logger.exception('Failed to fetch data from Reddit API.')
             return request, None
-
 
     @staticmethod
     def twitter(request, id):

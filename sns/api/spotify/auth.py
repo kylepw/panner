@@ -55,6 +55,7 @@ class OAuth2Code(OAuthHandler):
         {'access_token': 'xxx', 'refresh_token': 'xxx', ...}
 
     """
+
     def __init__(
         self,
         client_id=None,
