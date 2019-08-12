@@ -6,7 +6,6 @@ import time
 
 logger = logging.getLogger(__name__)
 
-
 class OAuth2Bearer(requests.auth.AuthBase):
     """Authenticates API requests"""
 
