@@ -5,10 +5,11 @@ from unittest import TestCase
 from unittest.mock import Mock
 
 
-class TestSpotify(TestCase):
+class TestApi(TestCase):
 
     def setUp(self):
-        pass
+        self.id = 'deerhunter_official'
+        self.spotify = Spotify()
 
-    def test_something(self):
-        pass
+    def test_get_playlists(self):
+        self.assertEqual(self.spotify.get_playlists(self.id), {'playlists': 'data'})
