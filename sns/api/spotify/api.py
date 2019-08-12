@@ -1,6 +1,6 @@
 import logging
 import requests
-from .auth import OAuth2Client
+from auth import OAuth2Client
 
 logger = logging.getLogger(__name__)
 
