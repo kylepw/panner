@@ -4,7 +4,6 @@ import requests
 from requests_oauthlib import OAuth2Session
 import time
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -56,7 +55,6 @@ class OAuth2Code(OAuthHandler):
         {'access_token': 'xxx', 'refresh_token': 'xxx', ...}
 
     """
-
     def __init__(
         self,
         client_id=None,
@@ -130,7 +128,7 @@ class OAuth2Client(OAuthHandler):
             if not data.get('expires_at'):
                 # Add 'expires_at' value not included in client credential response
                 data.update({'expires_at': time.time() + data.get('expires_in', 3600)})
-                logger.info(
+                logger.debug(
                     "Added {'expires_at': %s} to token data", data['expires_at']
                 )
             self.token = data

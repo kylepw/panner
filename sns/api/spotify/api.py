@@ -21,7 +21,6 @@ class Spotify:
         {"href":...}
 
     """
-
     API_HOST = 'api.spotify.com'
     API_ROOT = '/v1/'
 
