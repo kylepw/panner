@@ -38,4 +38,4 @@ OAUTHLIB_INSECURE_TRANSPORT=1
 # Generate a different key from root of Django project with:
 # $ python manage.py shell -c 'from django.core.management import utils; print(utils.get_random_secret_key())'
 SECRET_KEY=poo
-
+LOGLEVEL=error
