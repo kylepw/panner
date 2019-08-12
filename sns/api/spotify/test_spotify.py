@@ -1,5 +1,5 @@
-from api import Spotify
-from auth import OAuth2Client
+from .api import Spotify
+from .auth import OAuth2Client
 
 from unittest import TestCase
 from unittest.mock import Mock

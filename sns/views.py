@@ -6,10 +6,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.cache import cache_page
 from django.views.generic import DetailView, ListView
 
-from sns.api.meetup import OAuth2Code as MeetupOAuth
-from sns.api.utils import GetActivity
-from sns.forms import ProfileForm
-from sns.models import Profile
+from .api.meetup import OAuth2Code as MeetupOAuth
+from .api.utils import GetActivity
+from .forms import ProfileForm
+from .models import Profile
 
 import json
 import logging
