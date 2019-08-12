@@ -28,7 +28,7 @@ if not DEBUG:
     # SECURE_SSL_REDIRECT = True
 
 
-# Logging config
+# Logging
 #
 LOGGING_CONFIG = None
 
@@ -53,10 +53,10 @@ logging.config.dictConfig({
     },
     'loggers': {
         '': {
-            'level': 'INFO',
+            'level': 'ERROR',
             'handlers': ['console'],
         },
-        'panner': {
+        'sns': {
             'level': LOGLEVEL,
             'handlers': ['console'],
             'propagate': False,
