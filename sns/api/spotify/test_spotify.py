@@ -1,5 +1,4 @@
 from .api import requests, Spotify
-from .auth import OAuth2Client
 
 from unittest import TestCase
 from unittest.mock import patch, Mock
@@ -7,13 +6,9 @@ from unittest.mock import patch, Mock
 
 class TestApi(TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        # Spotify() instance with faux data
-        auth = OAuth2Client(client_id='id', client_secret='secret', token={'token': 'value'})
-        cls.spotify = Spotify(auth)
-
     def setUp(self):
+        self.spotify = Spotify(auth=Mock())
+
         patch_get = patch.object(requests, 'get')
         self.mock_get = patch_get.start()
         self.addCleanup(patch_get.stop)
