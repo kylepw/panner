@@ -1,4 +1,4 @@
-from .api import Spotify
+from .api import requests, Spotify
 from .auth import OAuth2Client
 
 from unittest import TestCase
@@ -13,27 +13,40 @@ class TestApi(TestCase):
         cls.spotify = Spotify()
 
     def setUp(self):
-        self.valid_id = 'deerhunter_official'
-        self.invalid_id = 'dflkj4k523j423'
+        patch_get = patch.object(requests, 'get')
+        self.mock_get = patch_get.start()
+        self.addCleanup(patch_get.stop)
 
     def test_get_playlists_with_valid_id(self):
-        self.assertIn('items', self.spotify.get_playlists(self.valid_id))
+        response = {'items': ['foobar']}
+        self.mock_get.return_value.json.return_value = response
+        self.assertIn('items', self.spotify.get_playlists('valid_id'))
 
     def test_get_playlists_with_invalid_id(self):
-        self.assertIn('error', self.spotify.get_playlists(self.invalid_id))
+        response = {'error': '401'}
+        self.mock_get.return_value.json.return_value = response
+        self.assertIn('error', self.spotify.get_playlists('invalid_id'))
 
     def test_get_playlists_with_no_id(self):
         # Should error in read-only mode
+        response = {'error': '404'}
+        self.mock_get.return_value.json.return_value = response
         self.assertIn('error', self.spotify.get_playlists())
 
     def test_get_profile_with_valid_id(self):
-        self.assertIn('display_name', self.spotify.get_profile(self.valid_id))
+        response = {'display_name': 'valid_id'}
+        self.mock_get.return_value.json.return_value = response
+        self.assertIn('display_name', self.spotify.get_profile('valid_id'))
 
     def test_get_profile_with_invalid_id(self):
-        self.assertIn('error', self.spotify.get_profile(self.invalid_id))
+        response = {'error': '401'}
+        self.mock_get.return_value.json.return_value = response
+        self.assertIn('error', self.spotify.get_profile('invalid_id'))
 
     def test_get_profile_with_no_id(self):
         # Should error in read-only mode
+        response = {'error': '404'}
+        self.mock_get.return_value.json.return_value = response
         self.assertIn('error', self.spotify.get_profile())
 
     @patch.object(Spotify, 'get_profile', return_value={'images':[{'url': 'http://foo.com/image.jpg'}]})
