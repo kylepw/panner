@@ -9,8 +9,9 @@ class TestApi(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        #cls.maxDiff = None
-        cls.spotify = Spotify()
+        # Spotify() instance with faux data
+        auth = OAuth2Client(client_id='id', client_secret='secret', token={'token': 'value'})
+        cls.spotify = Spotify(auth)
 
     def setUp(self):
         patch_get = patch.object(requests, 'get')
