@@ -34,8 +34,8 @@ class OAuthHandler:
 
     def is_token_expired(self, token=None):
         if token and token.get('expires_at'):
-            return time.time() > int(token.get('expires_at'))
-        return time.time() > int(self.token.get('expires_at'))
+            return time.time() > int(token.get('expires_at') or 0)
+        return time.time() > int(self.token.get('expires_at') or 0)
 
     def _url_for_endpoint(self, endpoint):
         """Return full url to OAuth endpoint."""
@@ -63,7 +63,7 @@ class OAuth2Code(OAuthHandler):
         token=None,
         scope=None,
     ):
-        super().__init__(client_id=None, client_secret=None, token=None)
+        super().__init__(client_id, client_secret, token)
         self.redirect_uri = redirect_uri or os.getenv('SPOTIFY_REDIRECT_URI')
         self.scope = scope
 
@@ -118,7 +118,7 @@ class OAuth2Client(OAuthHandler):
             if data.get('error'):
                 raise ValueError(
                     'Failed to acquire access token with `%s` error: %s'
-                    % (data.get('error', '?'), data.get('error_description', '?'))
+                    % (data.get('error'), data.get('error_description', '?'))
                 )
             if data.get('token_type', '').lower() != 'bearer':
                 raise ValueError(
