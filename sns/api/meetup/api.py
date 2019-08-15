@@ -113,7 +113,7 @@ class Meetup:
         }
         tz_re = r'(\s*[A-Z]{2,3}\s*)'
         found_tz = re.search(tz_re, date_str)
-        if not found_tz:
+        if not found_tz or found_tz.group().strip() not in US_TIMEZONES:
             return
         local_tz = pytz.timezone(US_TIMEZONES[found_tz.group().strip()])
         date_str = re.sub(tz_re, ' ', date_str)
