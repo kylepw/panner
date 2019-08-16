@@ -38,16 +38,6 @@ class ProfileFormTests(TestCase):
         self.assertIn('name', form.errors.keys())
         self.assertIn('Ensure this value has at most', form.errors['name'][0])
 
-    def test_add_profile_with_duplicate_name(self):
-        name = 'Harry'
-        form = ProfileForm(data={'name': name})
-
-        self.assertFalse(form.is_valid())
-        self.assertIn('name', form.errors.keys())
-        self.assertEqual(
-            form.errors['name'], ['Profile with this Name already exists.']
-        )
-
     def test_forms_fields_match_model_fields(self):
         model_fields = [field for field, _ in Profile().get_fields()]
         for field in model_fields:
