@@ -5,7 +5,6 @@ from unittest.mock import patch, Mock
 
 
 class TestApi(TestCase):
-
     def setUp(self):
         self.spotify = Spotify(auth=Mock())
 
@@ -45,16 +44,23 @@ class TestApi(TestCase):
         self.mock_get.return_value.json.return_value = response
         self.assertIn('error', self.spotify.get_profile())
 
-    @patch.object(Spotify, 'get_profile', return_value={'images':[{'url': 'http://foo.com/image.jpg'}]})
-    def test_profile_image_url_with_valid_get_profile_return_value(self, mock_profile_image_url):
-        self.assertEqual(self.spotify.profile_image_url('badid'), 'http://foo.com/image.jpg')
+    @patch.object(
+        Spotify,
+        'get_profile',
+        return_value={'images': [{'url': 'http://foo.com/image.jpg'}]},
+    )
+    def test_profile_image_url_with_valid_get_profile_return_value(
+        self, mock_profile_image_url
+    ):
+        self.assertEqual(
+            self.spotify.profile_image_url('badid'), 'http://foo.com/image.jpg'
+        )
 
-    @patch.object(Spotify, 'get_profile', return_value={'error':'404'})
+    @patch.object(Spotify, 'get_profile', return_value={'error': '404'})
     def test_profile_image_url_with_get_profile_fail(self, mock_profile_image_url):
         self.assertEqual(self.spotify.profile_image_url('badid'), None)
 
 
 class TestAuth(TestCase):
-
     def test_something(self):
         pass
