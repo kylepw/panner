@@ -117,6 +117,7 @@ def profile_search(request):
         request, 'sns/profile_search.html', {'profile_exists': profile_exists}
     )
 
+
 @cache_page(60 * 3)
 def profile_autocomplete(request):
     """Return profiles matching autocomplete query"""

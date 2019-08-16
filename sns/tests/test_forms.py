@@ -40,7 +40,6 @@ class ProfileFormTests(TestCase):
 
     def test_add_profile_with_duplicate_name(self):
         name = 'Harry'
-        profile = Profile.objects.create(name=name)
         form = ProfileForm(data={'name': name})
 
         self.assertFalse(form.is_valid())

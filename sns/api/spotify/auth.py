@@ -6,6 +6,7 @@ import time
 
 logger = logging.getLogger(__name__)
 
+
 class OAuth2Bearer(requests.auth.AuthBase):
     """Authenticates API requests"""
 
@@ -34,8 +35,8 @@ class OAuthHandler:
 
     def is_token_expired(self, token=None):
         if token and token.get('expires_at'):
-            return time.time() > int(token.get('expires_at') or 0)
-        return time.time() > int(self.token.get('expires_at') or 0)
+            return time.time() > float(token.get('expires_at') or 0)
+        return time.time() > float(self.token.get('expires_at') or 0)
 
     def _url_for_endpoint(self, endpoint):
         """Return full url to OAuth endpoint."""

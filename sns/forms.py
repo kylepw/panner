@@ -28,5 +28,3 @@ class ProfileForm(forms.ModelForm):
                     self.add_error('name', msg)
 
         return data
-
-

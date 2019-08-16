@@ -2,7 +2,6 @@ from django.test import TestCase
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
-from sns.forms import ProfileForm
 from sns.models import Profile
 
 

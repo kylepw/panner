@@ -1,6 +1,4 @@
 """Process data from API wrapper modules."""
-
-from django.shortcuts import redirect
 import logging
 
 from .meetup import Meetup, OAuth2Code as MeetupOAuth

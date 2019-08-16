@@ -1,5 +1,4 @@
-from praw.models import Comment, Submission
-from reddit import datetime, logging, NotFound, os, PrawReddit, pytz, Reddit
+from reddit import logging, NotFound, Reddit
 from requests import Response
 from unittest import TestCase
 from unittest.mock import call, Mock, MagicMock, patch
