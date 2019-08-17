@@ -44,7 +44,7 @@ class TestOAuthHandler(TestCase):
 
 class TestOAuth2Code(TestCase):
     def setUp(self):
-        patch_oauth2session = patch('meetup.auth.OAuth2Session')
+        patch_oauth2session = patch('meetup.auth.OAuth2Session', autospec=True)
         self.mock_oauth2session = patch_oauth2session.start()
 
         self.addCleanup(patch_oauth2session.stop)

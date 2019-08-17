@@ -48,6 +48,7 @@ class TestApi(TestCase):
         Spotify,
         'get_profile',
         return_value={'images': [{'url': 'http://foo.com/image.jpg'}]},
+        autospec=True,
     )
     def test_profile_image_url_with_valid_get_profile_return_value(
         self, mock_profile_image_url
@@ -56,7 +57,7 @@ class TestApi(TestCase):
             self.spotify.profile_image_url('badid'), 'http://foo.com/image.jpg'
         )
 
-    @patch.object(Spotify, 'get_profile', return_value={'error': '404'})
+    @patch.object(Spotify, 'get_profile', return_value={'error': '404'}, autospec=True)
     def test_profile_image_url_with_get_profile_fail(self, mock_profile_image_url):
         self.assertEqual(self.spotify.profile_image_url('badid'), None)
 

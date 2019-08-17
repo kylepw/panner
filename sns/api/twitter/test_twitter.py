@@ -8,8 +8,8 @@ logger = logging.getLogger('twitter')
 
 class TwitterTests(TestCase):
     def setUp(self):
-        patch_appauth = patch('tweepy.AppAuthHandler')
-        patch_api = patch('tweepy.API')
+        patch_appauth = patch('tweepy.AppAuthHandler', autospec=True)
+        patch_api = patch('tweepy.API', autospec=True)
 
         self.mock_appauth = patch_appauth.start()
         self.mock_api = patch_api.start()
@@ -27,7 +27,7 @@ class TwitterTests(TestCase):
         id = '123'
         api = Twitter('id', 'secret')
 
-        with patch('tweepy.Cursor') as mock_cursor:
+        with patch('tweepy.Cursor', autospec=True) as mock_cursor:
             api.get_tweets(id)
 
         mock_cursor.assert_called_once_with(api.api.user_timeline, id=id)
@@ -36,7 +36,7 @@ class TwitterTests(TestCase):
     def test_nothing_returned_when_exception_called(self, mock_exception):
         api = Twitter('id', 'secret')
 
-        with patch('tweepy.Cursor', side_effect=mock_exception) as mock_cursor:
+        with patch('tweepy.Cursor', side_effect=mock_exception, autospec=True) as mock_cursor:
             api.get_tweets('123')
 
         mock_cursor.assert_called_once()
