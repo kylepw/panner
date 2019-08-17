@@ -8,8 +8,8 @@ logger = logging.getLogger('twitter')
 
 class TwitterTests(TestCase):
     def setUp(self):
-        patch_appauth = patch('tweepy.AppAuthHandler', autospec=True)
-        patch_api = patch('tweepy.API', autospec=True)
+        patch_appauth = patch('api.twitter.twitter.tweepy.AppAuthHandler', autospec=True)
+        patch_api = patch('api.twitter.twitter.tweepy.API', autospec=True)
 
         self.mock_appauth = patch_appauth.start()
         self.mock_api = patch_api.start()
