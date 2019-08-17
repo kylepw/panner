@@ -63,9 +63,23 @@ Run (on Django development web server)
 
 - Open ``http://127.0.0.1:8000`` in a browser.
 
+Tests
+-----
+- Run Django tests from top of project::
+
+    $ pipenv shell
+    (panner)$ docker run --name db -p 5432:5432 -d postgres:11
+    (panner)$ docker run --name redis -p 6379:6379 -d redis:5
+    (panner)$ export DB_HOST=127.0.0.1 REDIS_URL=redis://127.0.0.1:6379/1
+    (panner)$ python manage.py test
+
+- Run api unit tests from sns directory::
+
+    $ pipenv shell && cd sns
+    sns (panner)$ python -m unittest discover api
+
 Todo
 ----
-- More tests.
 - Add Github API support.
 - Multiple user account support.
 
