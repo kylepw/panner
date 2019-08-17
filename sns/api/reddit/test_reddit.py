@@ -1,9 +1,9 @@
-from reddit import logging, NotFound, Reddit
+from api.reddit.reddit import logging, NotFound, Reddit
 from requests import Response
 from unittest import TestCase
 from unittest.mock import call, Mock, MagicMock, patch
 
-logger = logging.getLogger('reddit')
+logger = logging.getLogger('api.reddit.reddit')
 
 
 class RedditTests(TestCase):
@@ -12,7 +12,7 @@ class RedditTests(TestCase):
         client_secret = 'secret'
         user_agent = 'agent'
 
-        with patch('reddit.PrawReddit') as MockPrawReddit:
+        with patch('api.reddit.reddit.PrawReddit') as MockPrawReddit:
             p = MockPrawReddit.return_value
             p.client_id = client_id
             p.client_secret = client_secret
@@ -46,8 +46,8 @@ class GetCommentsSubmissionsTest(TestCase):
     def setUp(self):
         self.mock_api = MagicMock()
 
-        patch_datetime = patch('reddit.datetime')
-        patch_pytz = patch('reddit.pytz')
+        patch_datetime = patch('api.reddit.reddit.datetime')
+        patch_pytz = patch('api.reddit.reddit.pytz')
 
         self.mock_datetime = patch_datetime.start()
         self.mock_pytz = patch_pytz.start()
