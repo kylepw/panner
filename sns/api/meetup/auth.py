@@ -92,6 +92,9 @@ class OAuth2Code(OAuthHandler):
             self.token.update(
                 {'expires_at': time.time() + self.token.get('expires_in', 3600)}
             )
+            logger.debug(
+                "Added {'expires_at': %s} to token data.", self.token['expires_at']
+            )
         return self.token
 
     def refresh_token(self, refresh_token=None):
@@ -101,4 +104,5 @@ class OAuth2Code(OAuthHandler):
         self.token = self.oauth.refresh_token(
             self._url_for_endpoint('access'), refresh_token, **extra
         )
+        logger.debug('Refreshed token: %s', self.token.get('access_token'))
         return self.token
