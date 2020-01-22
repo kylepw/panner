@@ -9,7 +9,7 @@ idna==2.8
 oauthlib==3.1.0
 praw==6.5.1
 prawcore==1.0.1
-psycopg2==2.8.4
+psycopg2-binary==2.8.4
 PySocks==1.7.1
 pytz==2019.3
 redis==3.3.11
