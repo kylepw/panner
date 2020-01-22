@@ -184,7 +184,7 @@ STATIC_URL = '/static/'
 # Heroku config
 
 if os.environ.get('HEROKU'):
-    import django_heroku
+    import dj_database_url
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
-    django_heroku.settings(locals())
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
